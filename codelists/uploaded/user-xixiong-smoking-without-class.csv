@@ -1,0 +1,82 @@
+code,term
+1092031000000108,Ex-smoker amount unknown
+1092041000000104,Ex-very heavy smoker (40+/day)
+1092071000000105,Ex-heavy smoker (20-39/day)
+1092091000000109,Ex-moderate smoker (10-19/day)
+1092111000000104,Ex-light smoker (1-9/day)
+1092131000000107,Ex-trivial smoker (<1/day)
+110483000,Tobacco user
+134406006,Smoking reduced
+160603005,Light cigarette smoker (1-9 cigs/day)
+160604004,Moderate cigarette smoker (10-19 cigs/day)
+160605003,Heavy cigarette smoker (20-39 cigs/day)
+160606002,Very heavy cigarette smoker (40+ cigs/day)
+160612007,Keeps trying to stop smoking
+160613002,Admitted tobacco consumption possibly untrue
+160614008,Tobacco consumption unknown
+160616005,Trying to give up smoking
+160617001,Stopped smoking
+160618006,Current non-smoker
+160619003,Rolls own cigarettes
+160620009,Ex-pipe smoker
+160621008,Ex-cigar smoker
+160625004,Date ceased smoking
+203191000000107,Wants to stop smoking
+221000119102,Never smoked any substance
+225934006,Smokes in bed
+228486009,Time since stopped smoking
+230056004,Cigarette consumption
+230057008,Cigar consumption
+230058003,Pipe tobacco consumption
+230059006,Occasional cigarette smoker
+230060001,Light cigarette smoker
+230062009,Moderate cigarette smoker
+230063004,Heavy cigarette smoker
+230064005,Very heavy cigarette smoker
+230065006,Chain smoker
+266918002,Amount and type of tobacco smoked
+266919005,Never smoked tobacco
+266920004,Trivial cigarette smoker (less than one cigarette/day)
+266921000,Ex-trivial cigarette smoker (<1/day)
+266922007,Ex-light cigarette smoker (1-9/day)
+266923002,Ex-moderate cigarette smoker (10-19/day)
+266924008,Ex-heavy cigarette smoker (20-39/day)
+266925009,Ex-very heavy cigarette smoker (40+/day)
+266927001,Tobacco smoking consumption unknown
+266928006,EX-Smoker NOS
+266929003,Smoking started
+281018007,Ex-cigarette smoker
+308438006,Smoking restarted
+315609007,Pack years
+360890004,Intolerant ex-smoker
+360900008,Aggressive ex-smoker
+365980008,Tobacco use and exposure - finding
+390900001,Smoking cessation milestones
+390902009,Smoking status at 4 weeks
+390903004,Smoking status between 4 and 52 weeks
+394871007,Thinking about stopping smoking
+394872000,Ready to stop smoking
+394873005,Not interested in stopping smoking
+401159003,Reason for restarting smoking
+401201003,Cigarette pack-years
+405746006,Current non smoker but past smoking history unknown
+413173009,Minutes from waking to first tobacco consumption
+428041000124106,Occasional tobacco smoker
+446172000,Failed attempt to stop smoking
+449868002,Smokes tobacco daily
+48031000119106,Ex-smoker for more than 1 year
+492191000000103,Ex roll-up cigarette smoker
+517211000000106,Recently stopped smoking
+53896009,Tolerant ex-smoker
+56578002,Moderate smoker (20 or less per day)
+56771006,Heavy smoker (over 20 per day)
+59978006,Cigar smoker
+65568007,Cigarette smoker
+735112005,Date ceased using moist tobacco
+735128000,Ex-smoker for less than 1 year
+77176002,Smoking
+782516008,Number of calculated pack years for cumulative lifetime tobacco exposure
+82302008,Pipe smoker
+836001000000109,Waterpipe tobacco consumption
+8392000,Non-smoker
+8517006,History of tobacco use

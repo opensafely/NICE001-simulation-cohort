@@ -2,7 +2,18 @@ version: '5.0'
 
 actions:
   generate_dataset:
-    run: ehrql:v1 generate-dataset analysis/dataset_definition.py --output output/dataset.csv.gz
+    run: >
+      ehrql:v1 generate-dataset 
+      analysis/dataset_definition_qfracture.py 
+      --output output/qfracture_variables.csv
     outputs:
       highly_sensitive:
-        dataset: output/dataset.csv.gz
+        dataset: output/qfracture_variables.csv
+
+  identify_dxa_eligible:
+    run: stata-mp:v1 analysis/identify_dxa_eligible.do
+    needs: [generate_dataset]
+    outputs:
+      highly_sensitive:
+        cohort_with_dxa_flags: output/qfracture_cohort_with_dxa_flags.dta
+        dxa_eligible_population: output/dxa_eligible_population.dta
