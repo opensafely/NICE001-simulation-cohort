@@ -1,3 +1,184 @@
 {
-  "files": {}
+  "files": {
+    "nhsd-primary-care-domain-refsets-bmival_cod.csv": {
+      "id": "nhsd-primary-care-domain-refsets/bmival_cod/20260630",
+      "url": "https://www.opencodelists.org/codelist/nhsd-primary-care-domain-refsets/bmival_cod/20260630/",
+      "downloaded_at": "2026-09-07 16:46:20.893966+00:00Z",
+      "sha": "2fc9695c0029388d5d4741e821688e0c4a1b19ee"
+    },
+    "nhsd-primary-care-domain-refsets-ast_cod.csv": {
+      "id": "nhsd-primary-care-domain-refsets/ast_cod/20260630",
+      "url": "https://www.opencodelists.org/codelist/nhsd-primary-care-domain-refsets/ast_cod/20260630/",
+      "downloaded_at": "2026-09-08 15:26:11.679190+00:00Z",
+      "sha": "40b9e08f0468a0cb15af222d626da906d029911f"
+    },
+    "nhsd-primary-care-domain-refsets-copd_cod.csv": {
+      "id": "nhsd-primary-care-domain-refsets/copd_cod/20260630",
+      "url": "https://www.opencodelists.org/codelist/nhsd-primary-care-domain-refsets/copd_cod/20260630/",
+      "downloaded_at": "2026-09-08 15:26:11.901198+00:00Z",
+      "sha": "57431dbda7129d9c915a404dff0348cfcc9cd6f6"
+    },
+    "nhsd-primary-care-domain-refsets-mi_cod.csv": {
+      "id": "nhsd-primary-care-domain-refsets/mi_cod/20260630",
+      "url": "https://www.opencodelists.org/codelist/nhsd-primary-care-domain-refsets/mi_cod/20260630/",
+      "downloaded_at": "2026-09-08 15:26:12.062287+00:00Z",
+      "sha": "8e2f62fd6e3ae44485b2ded57bdc85c7d2207661"
+    },
+    "nhsd-primary-care-domain-refsets-angina_cod.csv": {
+      "id": "nhsd-primary-care-domain-refsets/angina_cod/20260630",
+      "url": "https://www.opencodelists.org/codelist/nhsd-primary-care-domain-refsets/angina_cod/20260630/",
+      "downloaded_at": "2026-09-08 15:26:12.196531+00:00Z",
+      "sha": "9ea27aded10215fab7a957a0a5e9f25579d96252"
+    },
+    "nhsd-primary-care-domain-refsets-strk_cod.csv": {
+      "id": "nhsd-primary-care-domain-refsets/strk_cod/20260630",
+      "url": "https://www.opencodelists.org/codelist/nhsd-primary-care-domain-refsets/strk_cod/20260630/",
+      "downloaded_at": "2026-09-08 15:26:12.337146+00:00Z",
+      "sha": "14a9a227bebbe509459f1bbedd9ceb903a50d4d7"
+    },
+    "nhsd-primary-care-domain-refsets-tia_cod.csv": {
+      "id": "nhsd-primary-care-domain-refsets/tia_cod/20260630",
+      "url": "https://www.opencodelists.org/codelist/nhsd-primary-care-domain-refsets/tia_cod/20260630/",
+      "downloaded_at": "2026-09-08 15:26:12.462182+00:00Z",
+      "sha": "582c570c9e3f0229587e15ae38a343042efce060"
+    },
+    "nhsd-primary-care-domain-refsets-dem_cod.csv": {
+      "id": "nhsd-primary-care-domain-refsets/dem_cod/20260630",
+      "url": "https://www.opencodelists.org/codelist/nhsd-primary-care-domain-refsets/dem_cod/20260630/",
+      "downloaded_at": "2026-09-08 15:26:12.603308+00:00Z",
+      "sha": "72828d8d3c61aa43d69ebccd510752a72cfbbaaa"
+    },
+    "nhsd-primary-care-domain-refsets-epil_cod.csv": {
+      "id": "nhsd-primary-care-domain-refsets/epil_cod/20260630",
+      "url": "https://www.opencodelists.org/codelist/nhsd-primary-care-domain-refsets/epil_cod/20260630/",
+      "downloaded_at": "2026-09-08 15:26:12.850277+00:00Z",
+      "sha": "61d301308ce075d6a5ccdece283f13dea4bb9c24"
+    },
+    "nhsd-primary-care-domain-refsets-falls_cod.csv": {
+      "id": "nhsd-primary-care-domain-refsets/falls_cod/20260630",
+      "url": "https://www.opencodelists.org/codelist/nhsd-primary-care-domain-refsets/falls_cod/20260630/",
+      "downloaded_at": "2026-09-08 15:26:12.973277+00:00Z",
+      "sha": "436474dce91da8bd07f03fa69161608f3522f8ae"
+    },
+    "nhsd-primary-care-domain-refsets-cldatrisk1_cod.csv": {
+      "id": "nhsd-primary-care-domain-refsets/cldatrisk1_cod/20260630",
+      "url": "https://www.opencodelists.org/codelist/nhsd-primary-care-domain-refsets/cldatrisk1_cod/20260630/",
+      "downloaded_at": "2026-09-08 15:26:13.115581+00:00Z",
+      "sha": "31661579798c91ab8dd074493a63d476901fdbaa"
+    },
+    "nhsd-primary-care-domain-refsets-crohns_cod.csv": {
+      "id": "nhsd-primary-care-domain-refsets/crohns_cod/20260630",
+      "url": "https://www.opencodelists.org/codelist/nhsd-primary-care-domain-refsets/crohns_cod/20260630/",
+      "downloaded_at": "2026-09-08 15:26:13.238245+00:00Z",
+      "sha": "fbff9bedcc9de95a7757bdf1a39d811bb74404b4"
+    },
+    "nhsd-primary-care-domain-refsets-ulccolitis_cod.csv": {
+      "id": "nhsd-primary-care-domain-refsets/ulccolitis_cod/20260630",
+      "url": "https://www.opencodelists.org/codelist/nhsd-primary-care-domain-refsets/ulccolitis_cod/20260630/",
+      "downloaded_at": "2026-09-08 15:26:13.479707+00:00Z",
+      "sha": "d6ea7081493ecb2a0d0fd9d08f6fd68cf1c436fe"
+    },
+    "nhsd-primary-care-domain-refsets-coeliac_cod.csv": {
+      "id": "nhsd-primary-care-domain-refsets/coeliac_cod/20260630",
+      "url": "https://www.opencodelists.org/codelist/nhsd-primary-care-domain-refsets/coeliac_cod/20260630/",
+      "downloaded_at": "2026-09-08 15:26:13.620523+00:00Z",
+      "sha": "a3475e0f789a66f008992a7b6471c731a6c7d824"
+    },
+    "nhsd-primary-care-domain-refsets-pd_cod.csv": {
+      "id": "nhsd-primary-care-domain-refsets/pd_cod/20260630",
+      "url": "https://www.opencodelists.org/codelist/nhsd-primary-care-domain-refsets/pd_cod/20260630/",
+      "downloaded_at": "2026-09-08 15:26:13.798348+00:00Z",
+      "sha": "4f09967f35179e23610685c3c113318c21ea9178"
+    },
+    "nhsd-primary-care-domain-refsets-rarth_cod.csv": {
+      "id": "nhsd-primary-care-domain-refsets/rarth_cod/20260630",
+      "url": "https://www.opencodelists.org/codelist/nhsd-primary-care-domain-refsets/rarth_cod/20260630/",
+      "downloaded_at": "2026-09-08 15:26:13.907969+00:00Z",
+      "sha": "0a66ad781c8deff1f5a27c0ea6010651232995ca"
+    },
+    "nhsd-primary-care-domain-refsets-slupus_cod.csv": {
+      "id": "nhsd-primary-care-domain-refsets/slupus_cod/20260630",
+      "url": "https://www.opencodelists.org/codelist/nhsd-primary-care-domain-refsets/slupus_cod/20260630/",
+      "downloaded_at": "2026-09-08 15:26:14.088193+00:00Z",
+      "sha": "b32a08a9575f3a38b68ec029dae4f900452dd8f8"
+    },
+    "nhsd-primary-care-domain-refsets-ckdatrisk1_cod.csv": {
+      "id": "nhsd-primary-care-domain-refsets/ckdatrisk1_cod/20260630",
+      "url": "https://www.opencodelists.org/codelist/nhsd-primary-care-domain-refsets/ckdatrisk1_cod/20260630/",
+      "downloaded_at": "2026-09-08 15:26:14.216447+00:00Z",
+      "sha": "0a47b0a909e581e84dddc9a2a2feb56584360d5b"
+    },
+    "nhsd-primary-care-domain-refsets-dmtype1_cod.csv": {
+      "id": "nhsd-primary-care-domain-refsets/dmtype1_cod/20260630",
+      "url": "https://www.opencodelists.org/codelist/nhsd-primary-care-domain-refsets/dmtype1_cod/20260630/",
+      "downloaded_at": "2026-09-08 15:26:14.315644+00:00Z",
+      "sha": "c1f4a42b1f976be2f8ff9a0be2845ed81e620fdc"
+    },
+    "nhsd-primary-care-domain-refsets-dmtype2_cod.csv": {
+      "id": "nhsd-primary-care-domain-refsets/dmtype2_cod/20260630",
+      "url": "https://www.opencodelists.org/codelist/nhsd-primary-care-domain-refsets/dmtype2_cod/20260630/",
+      "downloaded_at": "2026-09-08 15:26:14.417203+00:00Z",
+      "sha": "9ae4e751ad57000010c2aa0122b778a2d1b6c6ba"
+    },
+    "nhs-drug-refsets-antidepdrug_cod.csv": {
+      "id": "nhs-drug-refsets/antidepdrug_cod/20260630",
+      "url": "https://www.opencodelists.org/codelist/nhs-drug-refsets/antidepdrug_cod/20260630/",
+      "downloaded_at": "2026-09-08 14:41:44.629662+00:00Z",
+      "sha": "6efe8ff8ea69db2ce29f877416e9abd799aad722"
+    },
+    "nhs-drug-refsets-epildrug_cod.csv": {
+      "id": "nhs-drug-refsets/epildrug_cod/20260630",
+      "url": "https://www.opencodelists.org/codelist/nhs-drug-refsets/epildrug_cod/20260630/",
+      "downloaded_at": "2026-09-08 14:41:44.768196+00:00Z",
+      "sha": "22d7e5b703bd9555e7666753191b19cf3b505635"
+    },
+    "opensafely-malabsorption-due-to-other-causes.csv": {
+      "id": "opensafely/malabsorption-due-to-other-causes/7e45b98c",
+      "url": "https://www.opencodelists.org/codelist/opensafely/malabsorption-due-to-other-causes/7e45b98c/",
+      "downloaded_at": "2026-09-08 15:26:13.708208+00:00Z",
+      "sha": "dc981c960df1b4b97e66a5f1f9fbba14fa97c0b6"
+    },
+    "opensafely-hyperparathyroidism.csv": {
+      "id": "opensafely/hyperparathyroidism/1f0ec75b",
+      "url": "https://www.opencodelists.org/codelist/opensafely/hyperparathyroidism/1f0ec75b/",
+      "downloaded_at": "2026-09-08 15:26:12.722225+00:00Z",
+      "sha": "59bcda82369b5a9e8bc0d9bc7c974a8e6064ddec"
+    },
+    "opensafely-alendronic-acid.csv": {
+      "id": "opensafely/alendronic-acid/114e9d3b",
+      "url": "https://www.opencodelists.org/codelist/opensafely/alendronic-acid/114e9d3b/",
+      "downloaded_at": "2026-08-25 17:04:33.932704+00:00Z",
+      "sha": "aff6c76112bc2679f5cd3f6451bc5b20099ef556"
+    },
+    "opensafely-risedronate.csv": {
+      "id": "opensafely/risedronate/4620439b",
+      "url": "https://www.opencodelists.org/codelist/opensafely/risedronate/4620439b/",
+      "downloaded_at": "2026-08-25 17:04:34.029081+00:00Z",
+      "sha": "690d33f9b5eefb713e312d3987d2f67de9d336fe"
+    },
+    "opensafely-ibandronic-acid.csv": {
+      "id": "opensafely/ibandronic-acid/14015d31",
+      "url": "https://www.opencodelists.org/codelist/opensafely/ibandronic-acid/14015d31/",
+      "downloaded_at": "2026-08-25 17:04:34.145346+00:00Z",
+      "sha": "75e9afb339385085366e6585703e950f0583c79e"
+    },
+    "opensafely-zoledronic-acid.csv": {
+      "id": "opensafely/zoledronic-acid/2fc3905c",
+      "url": "https://www.opencodelists.org/codelist/opensafely/zoledronic-acid/2fc3905c/",
+      "downloaded_at": "2026-08-25 17:04:34.265073+00:00Z",
+      "sha": "e1f2b6b8e84172c4297699c05ae428192abc6d85"
+    },
+    "opensafely-teriparatide.csv": {
+      "id": "opensafely/teriparatide/61e276c6",
+      "url": "https://www.opencodelists.org/codelist/opensafely/teriparatide/61e276c6/",
+      "downloaded_at": "2026-08-25 16:56:02.131238+00:00Z",
+      "sha": "0bc3d780a5078661872ffcfca9faa1efd5099c79"
+    },
+    "user-ciaranmci-cancer-snomed-ct.csv": {
+      "id": "user/ciaranmci/cancer-snomed-ct/4602666f",
+      "url": "https://www.opencodelists.org/codelist/user/ciaranmci/cancer-snomed-ct/4602666f/",
+      "downloaded_at": "2026-09-08 14:41:45.266902+00:00Z",
+      "sha": "152a4e265eab3215287618b652202baf2bb8e553"
+    }
+  }
 }
