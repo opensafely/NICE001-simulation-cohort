@@ -1,3 +1,23 @@
 code,term
+M8003,Postmenopausal osteoporosis with pathological fracture : Forearm
+M8013,Postoophorectomy osteoporosis with pathological fracture : Forearm
+M8023,Osteoporosis of disuse with pathological fracture : Forearm
+M8033,Postsurgical malabsorption osteoporosis with pathological fracture : Forearm
+M8043,Drug-induced osteoporosis with pathological fracture : Forearm
+M8053,Idiopathic osteoporosis with pathological fracture : Forearm
+M8083,Other osteoporosis with pathological fracture : Forearm
+M8093,Unspecified osteoporosis with pathological fracture : Forearm
+M8433,"Stress fracture, not elsewhere classified : Forearm"
+M8443,"Pathological fracture, not elsewhere classified : Forearm"
 S525,Fracture of lower end of radius
+S5250,Fracture of lower end of radius : closed
 S526,Fracture of lower end of both ulna and radius
+S5260,Fracture of lower end of both ulna and radius : closed
+S528,Fracture of other parts of forearm
+S5280,Fracture of other parts of forearm : closed
+S529,"Fracture of forearm, part unspecified"
+S5290,"Fracture of forearm, part unspecified : closed"
+S620,Fracture of navicular [scaphoid] bone of hand
+S6200,Fracture of navicular [scaphoid] bone of hand : closed
+S621,Fracture of other carpal bone(s)
+S6210,Fracture of other carpal bone(s) : closed

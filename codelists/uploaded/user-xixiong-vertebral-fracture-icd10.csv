@@ -1,2 +1,39 @@
 code,term
+M484,Fatigue fracture of vertebra
+M4840,Fatigue fracture of vertebra : Multiple sites in spine
+M4841,Fatigue fracture of vertebra : Occipito-atlanto-axial region
+M4842,Fatigue fracture of vertebra : Cervical region
+M4843,Fatigue fracture of vertebra : Cervicothoracic region
+M4844,Fatigue fracture of vertebra : Thoracic region
+M4845,Fatigue fracture of vertebra : Thoracolumbar region
+M4846,Fatigue fracture of vertebra : Lumbar region
+M4847,Fatigue fracture of vertebra : Lumbosacral region
+M4849,Fatigue fracture of vertebra : Site unspecified
 M485,"Collapsed vertebra, not elsewhere classified"
+M4850,"Collapsed vertebra, not elsewhere classified : Multiple sites in spine"
+M4851,"Collapsed vertebra, not elsewhere classified : Occipito-atlanto-axial region"
+M4852,"Collapsed vertebra, not elsewhere classified : Cervical region"
+M4853,"Collapsed vertebra, not elsewhere classified : Cervicothoracic region"
+M4854,"Collapsed vertebra, not elsewhere classified : Thoracic region"
+M4855,"Collapsed vertebra, not elsewhere classified : Thoracolumbar region"
+M4856,"Collapsed vertebra, not elsewhere classified : Lumbar region"
+M4857,"Collapsed vertebra, not elsewhere classified : Lumbosacral region"
+M4859,"Collapsed vertebra, not elsewhere classified : Site unspecified"
+S120,Fracture of first cervical vertebra
+S1200,Fracture of first cervical vertebra : closed
+S121,Fracture of second cervical vertebra
+S1210,Fracture of second cervical vertebra : closed
+S122,Fracture of other specified cervical vertebra
+S1220,Fracture of other specified cervical vertebra : closed
+S127,Multiple fractures of cervical spine
+S1270,Multiple fractures of cervical spine : closed
+S129,"Fracture of neck, part unspecified"
+S1290,"Fracture of neck, part unspecified : closed"
+S220,Fracture of thoracic vertebra
+S2200,Fracture of thoracic vertebra : closed
+S221,Multiple fractures of thoracic spine
+S2210,Multiple fractures of thoracic spine : closed
+S320,Fracture of lumbar vertebra
+S3200,Fracture of lumbar vertebra : closed
+T08,"Fracture of spine, level unspecified"
+T08X0,"Fracture of spine, level unspecified : closed"

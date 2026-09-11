@@ -1,4 +1,19 @@
 code,term
+M8005,Postmenopausal osteoporosis with pathological fracture : Pelvic region and thigh
+M8015,Postoophorectomy osteoporosis with pathological fracture : Pelvic region and thigh
+M8025,Osteoporosis of disuse with pathological fracture : Pelvic region and thigh
+M8035,Postsurgical malabsorption osteoporosis with pathological fracture : Pelvic region and thigh
+M8045,Drug-induced osteoporosis with pathological fracture : Pelvic region and thigh
+M8055,Idiopathic osteoporosis with pathological fracture : Pelvic region and thigh
+M8085,Other osteoporosis with pathological fracture : Pelvic region and thigh
+M8095,Unspecified osteoporosis with pathological fracture : Pelvic region and thigh
+M8435,"Stress fracture, not elsewhere classified : Pelvic region and thigh"
+M8445,"Pathological fracture, not elsewhere classified : Pelvic region and thigh"
 S720,Fracture of neck of femur
+S7200,Fracture of neck of femur : closed
 S721,Pertrochanteric fracture
+S7210,Pertrochanteric fracture : closed
 S722,Subtrochanteric fracture
+S7220,Subtrochanteric fracture : closed
+S729,"Fracture of femur, part unspecified"
+S7290,"Fracture of femur, part unspecified : closed"

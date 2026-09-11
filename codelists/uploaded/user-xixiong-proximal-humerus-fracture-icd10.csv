@@ -1,2 +1,17 @@
 code,term
+M8002,Postmenopausal osteoporosis with pathological fracture : Upper arm
+M8012,Postoophorectomy osteoporosis with pathological fracture : Upper arm
+M8022,Osteoporosis of disuse with pathological fracture : Upper arm
+M8032,Postsurgical malabsorption osteoporosis with pathological fracture : Upper arm
+M8042,Drug-induced osteoporosis with pathological fracture : Upper arm
+M8052,Idiopathic osteoporosis with pathological fracture : Upper arm
+M8082,Other osteoporosis with pathological fracture : Upper arm
+M8092,Unspecified osteoporosis with pathological fracture : Upper arm
+M8432,"Stress fracture, not elsewhere classified : Upper arm"
+M8442,"Pathological fracture, not elsewhere classified : Upper arm"
 S422,Fracture of upper end of humerus
+S4220,Fracture of upper end of humerus : closed
+S423,Fracture of shaft of humerus
+S4230,Fracture of shaft of humerus : closed
+S424,Fracture of lower end of humerus
+S4240,Fracture of lower end of humerus : closed

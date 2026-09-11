@@ -1,55 +1,168 @@
 code,term
+10936201000119107,Closed fracture of trapezoidal bone of right wrist
+10936241000119109,Closed fracture of trapezoidal bone of left wrist
+10937241000119107,Closed fracture of lunate bone of right wrist
+10937281000119102,Closed fracture of lunate bone of left wrist
+111640008,Closed fracture of radius
+112752007,Arthroscopy of wrist with internal fixation for fracture
+11313201000119107,Secondary osteoporotic fracture of right radius
+11313241000119109,Secondary osteoporotic fracture of left radius
+12202711000119103,Fracture of bone adjacent to prosthesis of right wrist joint
+12217801000119108,Fracture of bone adjacent to prosthesis of left wrist joint
 123618009,Closed reverse Colles' fracture
-123619001,Open reverse Colles' fracture
 123971006,Colles' fracture
 123972004,Reversed Colles' fracture
-1279741006,Open fracture of metaphysis of distal radius
+1264544004,Fracture of bone adjacent to prosthesis of wrist joint
+12676007,Fracture of radius
 1279881008,Closed fracture of metaphysis of distal end of radius
+1285722006,Fracture of distal end of left ulna
 1285724007,Fracture of distal end of left radius
+1290784005,Stress fracture of bone of wrist region
+12960001000004104,Fracture of left radius
+1303394003,Fracture of bone of left wrist region
+1303395002,Fracture of bone of right wrist region
+1303396001,Fracture of bone of bilateral wrist regions
+1303397005,Fracture of bone of wrist region
+1381842001,Osteoarthritis of wrist joint due to scaphoid non-union advanced collapse
+14430001000004102,Fracture of distal end of right ulna
+14916000,Fracture of trapezoidal bone of wrist
+157214000,Colles' fracture
+157217007,Fracture of distal end of radius
 16542861000119107,Closed fracture of metaphysis of distal end of left radius
 16542901000119101,Closed fracture of metaphysis of distal end of right radius
-16543151000119106,Open fracture of metaphysis of distal right radius
-16543671000119105,Open fracture of metaphysis of distal left radius
 17222009,Closed fracture of distal end of radius
 179173001,Closed reduction of fracture of wrist
 18310001000004100,Fracture of distal end of right radius
+2012002,Fracture of lunate bone of wrist
+208316009,Closed fracture: [Colles'] or [Smith's]
+208318005,"Closed fracture of ulna, lower epiphysis"
 208321007,Smith's fracture - closed
 208322000,Closed Galeazzi fracture
 208323005,Closed volar Barton's fracture
 208324004,Closed dorsal Barton's fracture
 208325003,Closed fracture radial styloid
 208326002,"Closed fracture distal radius, intra-articular, die-punch"
-208342009,Open volar Barton's fracture
-208343004,Open dorsal Barton's fracture
-208344005,Open fracture radial styloid
-208345006,"Open fracture distal radius, intra-articular, die-punch"
+208330004,Closed Barton's fracture
+208355005,Fracture of distal end of radius
+208356006,Fracture of distal end of radius and ulna
+208369005,"Closed fracture hamate, hook"
+208370006,"Closed fracture scaphoid, proximal pole"
+208371005,"Closed fracture scaphoid, waist, transverse"
+208372003,"Closed fracture scaphoid, waist, oblique"
+208373008,"Closed fracture scaphoid, waist, comminuted"
+208374002,"Closed fracture scaphoid, tuberosity"
+208375001,Closed fracture of multiple carpal bones
+209263002,Fracture dislocation or subluxation of wrist
+209264008,Closed fracture dislocation of wrist
 209265009,Closed fracture dislocation distal radioulnar joint
 209266005,Closed fracture dislocation radiocarpal joint
+209267001,Closed fracture dislocation midcarpal
+209269003,Closed fracture dislocation lunate (volar)
+209270002,Closed fracture dislocation perilunate (dorsal)
+209271003,Closed fracture dislocation perilunate transscaphoid
+209283001,Closed fracture subluxation of wrist
 209284007,Closed fracture subluxation of distal radioulnar joint
 209285008,Closed fracture subluxation radiocarpal joint
-25529004,Open fracture of distal end of radius
+209286009,Closed fracture subluxation midcarpal
+209288005,Closed fracture subluxation lunate (volar)
+209289002,Closed fracture subluxation perilunate (dorsal)
+209290006,Closed fracture subluxation perilunate transscaphoid
+263079005,Fracture dislocation of wrist joint
+263080008,Fracture dislocation of radiocarpal joint
+263081007,Fracture dislocation of midcarpal joint
+263082000,Fracture dislocation of lunate
+263083005,Fracture dislocation of perilunate joint
+263102004,Fracture subluxation of wrist
+263103009,Fracture subluxation of distal radioulnar joint
+263104003,Fracture subluxation of radiocarpal joint
+263106001,Fracture subluxation of midcarpal joint
+263108000,Fracture subluxation of lunate
+263109008,Fracture subluxation of perilunate joint
 263199001,Fracture of distal end of radius
 263200003,Volar Barton's fracture
 263201004,Dorsal Barton's fracture
+263205008,Fracture of distal end of ulna
 263208005,Fracture of distal end of radius and ulna
 269083002,Closed Colles' fracture
 27094009,Skillern's fracture
+271576001,Galeazzi fracture dislocation
+276813006,Closed reduction of fracture of carpals and metacarpals with internal fixation
+281513007,Transscaphoid-perilunate fracture dislocation
+281514001,Transscaphoid-capitate-perilunate fracture dislocation
+281515000,Transscaphoid-capitate-hamate-triquetral-perilunate fracture dislocation
+281516004,Transstyloid-perilunate fracture dislocation
+281517008,Transstyloid-scaphoid-perilunate fracture dislocation
+281518003,Volar transscaphoid-lunate fracture dislocation
 281527002,Fracture of radial styloid
-307712005,Open Barton's fracture
+281530009,Fracture of ulnar styloid
+29815003,Closed Colles' fracture
+30632004,Closed fracture of triquetral bone of wrist
+307172007,Fracture dislocation distal radioulnar joint
 307713000,Closed Barton's fracture
+31975004,Fracture of scaphoid bone
 33192001,Closed fracture of lower end of radius AND ulna
 35442005,Closed fracture of lower end of forearm
+357009,Closed fracture of trapezoidal bone of wrist
+37174005,Closed fracture of hamate bone of wrist
+37633006,Closed fracture of lunate bone of wrist
+390986009,Torus fracture of radius
+41036008,Closed fracture of styloid process of ulna
 426467005,Hutchinson's fracture
+42818005,Closed fracture of scaphoid bone
+429655000,Closed torus fracture of radius
+43767005,Closed fracture of pisiform bone of wrist
+445537004,Pathological fracture of distal radius
+445538009,Pathological fracture of distal ulna
+446461000124103,Fracture of right radius
 448355005,Greenstick fracture of distal radius
 448838000,Closed extraarticular fracture of distal radius
+46171000087101,Fracture of left carpus
+46331000087100,Fracture of right carpus
+46773004,Quervain's fracture
+48261000087100,Fracture of left scaphoid bone
+48391000087103,Fracture of right scaphoid bone
+48441000087102,Fracture of styloid process of left ulna
+48451000087104,Fracture of styloid process of right ulna
+50397009,Closed fracture of distal end of ulna
+53627009,Closed fracture of radius AND ulna
 54341000087101,Fracture of left radial styloid
 54421000087100,Fracture of right radial styloid
+54471000087101,Fracture of trapezium bone of left wrist
+54481000087104,Fracture of trapezium bone of right wrist
+54491000087102,Fracture of trapezoidal bone of left wrist
+54501000087105,Fracture of trapezoidal bone of right wrist
 54645004,Barton's fracture
+57114005,Closed fracture of trapezium bone of wrist
 58722007,Moore's fracture
+6163002,Closed fracture of head of ulna
+674461000000100,"Closed fracture distal ulna, unspecified"
+699162009,Open reduction of fracture of carpal bone without internal fixation
+704056001,Stress fracture of ulna
+704059008,Stress fracture of radius
+704167003,Pathological fracture of ulna
+704170004,Pathological fracture of radius
 704212006,Closed fracture of distal epiphysis of radius
+704244005,Pathologic fracture of ulna at site of neoplasm
+704247003,Pathologic fracture of radius at site of neoplasm
+704282002,Secondary osteoporotic fracture of ulna
+704285000,Secondary osteoporotic fracture of radius
+704336007,Osteoporotic fracture of radius
+704339000,Osteoporotic fracture of ulna
+705103007,Closed fracture of scaphoid bone with dislocation of perilunate joint
+708965002,Closed reduction of fracture of distal radius and percutaneous fixation using Kirschner wire
+710052000,Pathological fracture of distal radius and distal ulna
+71555008,Closed fracture of ulna
+72218009,Reduction of closed ulnar styloid fracture
+73316002,Fracture of capitate bone of wrist
 737261002,Fracture of lower end of radius with dorsal tilt
 737262009,Fracture of lower end of radius with volar tilt
-80411001,Open Colles' fracture
-849671000000101,Open extra-articular fracture of distal radius
-849681000000104,Open intra-articular fracture of distal radius
-88116004,Open fracture of lower end of radius AND ulna
+74465000,Fracture of trapezium of wrist
+7585008,Fracture of triquetral bone of wrist
+75857000,Fracture of radius AND ulna
+82065001,Fracture of carpal bone
+83258007,Closed reduction of fracture of carpals and metacarpals
+84030002,Fracture of pisiform bone of wrist
+85922006,Fracture of hamate bone of wrist
+90114000,Closed fracture of capitate bone of wrist
+91419009,Closed fracture of forearm
+9468002,Closed fracture of carpal bone

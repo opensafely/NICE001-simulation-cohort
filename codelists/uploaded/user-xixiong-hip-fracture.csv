@@ -1,79 +1,120 @@
 code,term
-10817981000119109,Open fracture of midcervical section of right femur
-10821851000119109,Open fracture of base of neck of right femur
-10821891000119104,Open fracture of base of neck of left femur
-10834301000119104,Open subcapital fracture of right femur
-10838021000119103,Open subcapital fracture of left femur
-10838061000119108,Open fracture of midcervical section of left femur
 127287001,Intertrochanteric fracture
+1290783004,Stress fracture of bone of hip joint region
+1292975008,Pertrochanteric fracture
+1292977000,Closed pertrochanteric fracture
+137741000119108,History of hip stress fracture
 137761000119107,History of fracture of hip due to traumatic event
+137771000119101,History of pathological hip fracture
+14300001000004101,Fixation of intertrochanteric fracture of femur using nail
+150618008,Closed reduction of fracture of hip
 157233005,Fracture of neck of femur
-15911931000119102,Open fracture of head of left femur
-15912091000119107,Open fracture of head of right femur
 15912331000119106,Closed fracture of head of left femur
 15912431000119100,Closed fracture of head of right femur
 15912531000119101,Closed fracture of trochanter of left femur
 15912631000119102,Closed fracture of trochanter of right femur
+15970001000004108,Periprosthetic fracture of proximal femur
 1705000,Closed fracture of base of neck of femur
 17194005,Late effect of fracture of neck of femur
+179011007,Primary open reduction & fixation fracture neck femur with named variants: [screw] or [nail] or [plate] or [multiple pins]
+179017006,Primary open reduction and internal fixation of proximal femoral fracture with screw/nail device alone
+179018001,Primary open reduction and internal fixation of proximal femoral fracture with screw/nail and intramedullary device
+179064006,Revision to open reduction and external fixation of proximal femoral fracture
+179065007,Revision to open reduction and internal fixation of proximal femoral fracture with screw/nail device alone
+179066008,Revision to open reduction and internal fixation of proximal femoral fracture with screw/nail and intramedullary device
+179067004,Revision to open reduction and internal fixation of proximal femoral fracture with screw/nail and plate device
+179091008,Closed reduction and internal fixation proximal femoral fracture with screw/nail device alone (& [Smith-Petersen nail] or [Garden screw] or [Richard's screw])
+179096003,Primary internal fixation(without reduction) of proximal femoral fracture with screw/nail device alone
+179097007,Primary internal fixation(without reduction) of proximal femoral fracture with screw/nail and intramedullary device
+179098002,Primary internal fixation(without reduction) of proximal femoral fracture with screw/nail and plate device
+179099005,Revision to internal fixation(without reduction) of proximal femoral fracture with screw/nail device alone
+179100002,Revision to internal fixation(without reduction) of proximal femoral fracture with screw/nail and intramedullary device
+179102005,Revision to internal fixation(without reduction) of proximal femoral fracture with screw/nail and plate device
+179103000,Primary closed reduction and internal fixation of proximal femoral fracture with screw/nail device alone
+179104006,Primary closed reduction and internal fixation of proximal femoral fracture with screw/nail and intramedullary device
+179105007,Primary closed reduction and internal fixation of proximal femoral fracture with screw/nail and plate device
+179106008,Revision to closed reduction and internal fixation of proximal femoral fracture with screw/nail device alone
+179107004,Revision to closed reduction and internal fixation of proximal femoral fracture with screw/nail and intramedullary device
+179108009,Revision to closed reduction and internal fixation of proximal femoral fracture with screw/nail and plate device
+179129000,Closed reduction of intracapsular fracture of neck of femur and internal fixation using a dynamic hip screw
+179136004,Primary external fixation(without reduction) of proximal femoral fracture
+179137008,Revision to external fixation(without reduction) of proximal femoral fracture
+179138003,Primary closed reduction and external fixation of proximal femoral fracture
+179139006,Revision to closed reduction and external fixation of proximal femoral fracture
+179159005,Closed reduction of fracture of hip
 198741000000106,"Closed fracture of femur, upper epiphysis"
-198751000000109,"Open fracture of femur, upper epiphysis"
 20100009,Closed fracture of intracapsular section of femur
 208520007,Fracture: [neck of femur] or [hip]
 208521006,"Closed fracture proximal femur, transcervical"
 208523009,"Closed fracture proximal femur, transepiphyseal"
 208524003,"Closed fracture proximal femur, midcervical section"
+208526001,Closed fracture of head of femur
 208528000,"Closed fracture proximal femur, subcapital, Garden grade I"
 208529008,"Closed fracture proximal femur, subcapital, Garden grade II"
 208530003,"Closed fracture proximal femur, subcapital, Garden grade III"
 208531004,"Closed fracture proximal femur, subcapital, Garden grade IV"
-208536009,"Open fracture proximal femur, transepiphyseal"
-208541001,Open subcapital fracture of proximal femur Garden grade I
-208542008,Open subcapital fracture of proximal femur Garden grade II
-208543003,Open subcapital fracture of proximal femur Garden grade III
-208544009,Open subcapital fracture of proximal femur Garden grade IV
 208548007,"Closed fracture of proximal femur, pertrochanteric"
 208550004,"Closed fracture proximal femur, intertrochanteric, two part"
 208551000,"Closed fracture proximal femur, subtrochanteric"
 208552007,"Closed fracture proximal femur, intertrochanteric, comminuted"
-208557001,"Open fracture proximal femur, intertrochanteric, two part"
-208558006,"Open fracture proximal femur, subtrochanteric"
-208559003,"Open fracture proximal femur, intertrochanteric, comminuted"
 208562000,Pertrochanteric fracture
 208563005,Subtrochanteric fracture of femur
 208566002,(Closed fracture of neck of femur) or (hip fracture NOS)
-208567006,Open fracture of neck of femur NOS
+209334003,Fracture dislocation or subluxation hip
+209335002,Closed fracture dislocation of hip joint
+209337005,Closed fracture subluxation of hip joint
 22802006,Closed pertrochanteric fracture
+230841000000109,Delivery of rehabilitation for hip fracture
+239281003,Primary open reduction of fracture of neck of femur and open fixation using Deyerle multiple hip pinning
+239284006,Primary open reduction of fracture of neck of femur and open fixation using Charnley compression screw
+239285007,Primary open reduction of fracture of neck of femur and open fixation using dynamic hip screw
+239286008,Primary open reduction of fracture of neck of femur and open fixation using Richards screw
+239288009,Closed reduction and internal fixation of proximal femoral fracture with Richard's cannulated hip screw
+239290005,Closed reduction of intracapsular fracture of neck of femur and fixation using Smith-Petersen nail
+239291009,Primary open reduction of fracture of neck of femur and open fixation using Holt nail
+239292002,Primary open reduction of fracture of neck of femur and open fixation using Ross Brown nail
+263088001,Fracture dislocation of hip joint
 263225007,Fracture of proximal end of femur
 263226008,Subcapital fracture of neck of femur
 263227004,Midcervical fracture of neck of femur
 263228009,Basicervical fracture of neck of femur
 263229001,Subtrochanteric fracture of femur
 263230006,Hip fracture NOS
-263231005,Open fracture of base of neck of femur
+265132005,Primary open reduction and internal fixation of proximal femoral fracture with screw/nail and plate device
+265141000,Closed reduction and internal fixation of proximal femoral fracture with screw/nail device alone
 269097005,Closed fracture of neck of femur NOS
-26938002,Open intertrochanteric fracture
+272431000000101,Delivery of rehabilitation for hip fracture 
 275338001,Closed subcapital fracture of femur
-275339009,Open subcapital fracture of femur
 275340006,Closed fracture of greater trochanter of femur
 275341005,Closed fracture of lesser trochanter of femur
-275342003,Open fracture of lesser trochanter of femur
-275343008,Open fracture of greater trochanter of femur
 301034006,Fracture of greater trochanter
-30489009,Open fracture of intracapsular section of femur
+302034009,Fracture subluxation of hip joint
+313330006,Closed reduction of intracapsular fracture of neck of femur and internal fixation using a dynamic hip screw
+321951000000104,Fluoroscopy guided repair of hip fracture by nailing
+359817006,Closed fracture of hip
 359820003,Closed fracture of neck of femur
-361119006,Open fracture of neck of femur
+379131000000106,Remanipulation of intracapsular fracture of neck of femur and fixation using nail or screw
 389308008,H/O: hip fracture
 390043007,H/O: hip fracture
 391093004,History of hip fracture
-41191003,Open fracture of head of femur
+409666003,Pathological fracture of neck of femur
 426382004,Closed avulsion fracture of greater trochanter of femur
 427688003,Closed avulsion fracture of lesser trochanter of femur
 428112005,Malunion of fracture of proximal femur
 431031001,Osteoporotic fracture of neck of femur
+432768005,Repair of fracture of hip by nailing using fluoroscopic guidance
+439423002,Closed manual reduction of fracture of head of femur
+439995008,Closed reduction of fracture of greater trochanter of femur
+440302000,Closed reduction of intertrochanteric fracture of femur
+440304004,Closed reduction of fracture of head of femur
+440361009,Closed manual reduction of intertrochanteric fracture of femur
+440376001,Closed reduction of peritrochanteric fracture of femur
+440572003,Closed manual reduction of peritrochanteric fracture of femur
+440573008,Open reduction of fracture of greater trochanter of femur with internal fixation
+442903009,"Open reduction of intertrochanteric fracture of femur with internal fixation using intramedullary implant, screw, and cerclage wiring"
+442914007,Percutaneous fixation of fracture of neck of femur
 445875009,Fracture of trochanter of femur
 445899009,Closed fracture of trochanter of femur
-446120005,Open subtrochanteric fracture of femur
 46481000087108,Fracture of neck of left femur
 46491000087105,Fracture of neck of right femur
 48281000087106,Fracture of midcervical section of neck of left femur
@@ -82,22 +123,48 @@ code,term
 48351000087108,Fracture of proximal end of right femur
 48481000087107,Intertrochanteric fracture of left femur
 48491000087109,Intertrochanteric fracture of right femur
-50830001,Open fracture of neck of femur
+489401000000105,Remanipulation of intracapsular fracture of neck of femur and fixation using nail or screw 
 52450003,Closed fracture of midcervical section of femur
+528241000000100,Revision to open reduction and internal fixation of proximal femoral fracture with screw/nail device alone
+529461000000109,Revision to internal fixation(without reduction) of proximal femoral fracture with screw/nail device alone
+529581000000104,Primary internal fixation(without reduction) of proximal femoral fracture with screw/nail device alone
+529621000000104,Primary open reduction and internal fixation of proximal femoral fracture with screw/nail device alone
+530521000000105,Primary closed reduction and internal fixation of proximal femoral fracture with screw/nail device alone
+530561000000102,Closed reduction and internal fixation of proximal femoral fracture with screw/nail device alone
 5913000,Fracture of neck of femur
-605151000000100,Open fracture of neck of femur NOS
 632531000000100,Closed fracture of neck of femur NOS
-66483005,Open pertrochanteric fracture
 68510005,Closed subtrochanteric fracture
+700097003,Fracture of bone of hip region
 703994007,Closed intra-articular fracture of head of femur
+704063001,Stress fracture of neck of femur
+704171000,Pathological fracture of proximal end of femur
+704249000,Pathologic fracture of proximal femur at site of neoplasm
 704287008,Secondary osteoporotic fracture of proximal femur
 704321000000100,Hip fracture NOS
 704334005,Osteoporotic fracture of proximal femur
 704409006,Closed subcapital fracture of neck of femur
-705124002,Open intra-articular fracture of head of femur
-71313000,Open subtrochanteric fracture
+705090003,Closed fracture of apophysis of femur
+708898008,Closed reduction of fracture of proximal femur and internal fixation using bone screw
+708900005,Closed reduction of fracture of proximal femur and internal fixation using bone wire
+708903007,Closed reduction of fracture of proximal femur and internal fixation using bone nail
+708905000,Closed reduction of fracture of femur and internal fixation using dynamic hip screw plate
+713220005,Arthroscopic primary reduction and fixation of fracture of neck of femur using dynamic hip screw
 733276006,Fracture of head of femur
+735087005,Closed reduction of fracture of left femur and internal fixation using dynamic hip screw plate
+735088000,Closed reduction of fracture of right femur and internal fixation using dynamic hip screw plate
+736402001,Hip fracture inpatient care plan
+787962003,Seinsheimer classification of subtrochanteric femur fracture type I
+787963008,Seinsheimer classification of subtrochanteric femur fracture type II
+787964002,Seinsheimer classification of subtrochanteric femur fracture type III
+787965001,Seinsheimer classification of subtrochanteric femur fracture type IV
+787966000,Seinsheimer classification of subtrochanteric femur fracture type V
 788943004,Fracture of proximal epiphysis of femur
+79484004,Closed transcervical fracture of femur
 82261001,Closed fracture of neck of femur
-84320000,Open fracture of midcervical section of femur
+849961000000101,Referral to hip fracture programme
+850011000000109,Provision of written information about hip fracture
+851231000000102,Hip fracture care
+851671000000102,Hip fracture inpatient care plan
+852231000000109,Primary open reduction of fracture of neck of femur and open fixation using proximal femoral nail antirotation
+856171000000103,Primary open reduction of fracture of neck of femur and open fixation using proximal femoral nail antirotation
 89820008,Closed intertrochanteric fracture

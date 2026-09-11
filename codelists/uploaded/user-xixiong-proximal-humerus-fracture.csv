@@ -1,10 +1,25 @@
 code,term
 11608005,Open reduction of open shoulder joint dislocation with fracture of greater tuberosity
+1208378006,Closed reduction of fracture of humerus with percutaneous fixation using bone pin
+12209041000119109,Fracture of bone adjacent to right shoulder joint prosthesis
+12217761000119100,Fracture of bone adjacent to left shoulder joint prosthesis
+1268328001,Fracture of bone adjacent to shoulder joint prosthesis
 127286005,Fracture of upper end of humerus
 1278003,Open reduction of closed shoulder joint dislocation with fracture of greater tuberosity
+1303388006,Fracture of bone of right shoulder region
+1303389003,Fracture of bone of left shoulder region
 150609006,Closed reduction of fracture of humerus
+150610001,Closed reduction of fracture of shoulder
+15180008,Manual reduction of closed supracondylar fracture of humerus
 157206006,Fracture of humerus
 157210009,Fracture of humerus NOS
+16250001000004107,Fracture of shoulder
+16866431000119108,Closed fracture of capitellum of right humerus
+16867081000119101,Closed fracture of capitellum of left humerus
+179167002,Closed reduction of fracture of shoulder
+18204009,Manual reduction of closed fracture of humerus
+18751007,Manual reduction of closed fracture of medial condyle of humerus
+202141001,Hill-Sachs lesion
 208239001,"Closed fracture of proximal humerus, unspecified part"
 208240004,"Closed fracture proximal humerus, neck"
 208241000,"Closed fracture of proximal humerus, anatomical neck"
@@ -14,49 +29,118 @@ code,term
 208245009,"Closed fracture proximal humerus, three part"
 208246005,"Closed fracture proximal humerus, four part"
 208247001,Closed fracture of proximal humerus not otherwise specified
-208248006,Open fracture: [proximal humerus] or [shoulder]
-208249003,"Open fracture of proximal humerus, unspecified part"
-208250003,"Open fracture proximal humerus, neck"
-208251004,"Open fracture of proximal humerus, anatomical neck"
-208253001,"Open fracture proximal humerus, greater tuberosity"
-208254007,"Open fracture proximal humerus, head"
-208255008,"Open fracture of humerus, upper epiphysis"
-208256009,"Open fracture proximal humerus, three part"
-208257000,"Open fracture proximal humerus, four part"
-208258005,Open fracture of proximal humerus not otherwise specified
+208259002,"Closed fracture of humerus, shaft or unspecified part"
 208260007,Closed fracture of humerus NOS
+208261006,"Closed fracture of humerus, shaft or unspecified part NOS"
+208267005,"Closed fracture distal humerus, lateral condyle"
+208270009,"Closed fracture of distal humerus, trochlea"
+208271008,"Closed fracture distal humerus, lateral epicondyle"
+208272001,"Closed fracture distal humerus, capitellum"
+208273006,"Closed fracture distal humerus, bicondylar (T-Y fracture)"
+208274000,Multiple closed fractures of distal humerus
 208291001,Fracture of humerus NOS
+208510002,"Multiple fractures of clavicle, scapula and humerus"
+209236003,Fracture dislocation or subluxation of shoulder
+209238002,Closed fracture dislocation shoulder joint
+209245002,Closed fracture subluxation shoulder joint
+213479003,[X]Fracture of other parts of shoulder and upper arm
+213480000,"[X]Fracture of shoulder and upper arm, unspecified"
+21419000,Closed fracture of medial condyle of humerus
 24433001,Manual reduction of closed fracture of greater tuberosity of humerus
+2514009,Manual reduction of closed supracondylar fracture of humerus with traction
+263077007,Fracture dislocation of shoulder joint
+263098007,Fracture subluxation of shoulder joint
 263191003,Fracture of neck of humerus
+263192005,Fracture of distal end of humerus
+263193000,Supracondylar fracture of humerus
+269080004,Closed fracture of the distal humerus
+281525005,Fracture of the lateral humeral epicondyle
+281526006,Fracture of the medial humeral epicondyle
+287064006,Pathological fracture - shoulder
+287065007,Pathological fracture - upper arm
+287073003,Fracture malunion - shoulder
+288244006,Fracture malunion - upper arm
+311816000,Closed multiple fractures of clavicle and/or scapula and/or humerus
+37053006,Open reduction of fracture of humerus with internal fixation
+39519006,Manual reduction of closed fracture of shaft of humerus
 39706009,Closed reduction of fracture of humerus
 413875004,Closed fracture of head of humerus
+416833005,Closed fracture dislocation of joint of shoulder girdle
+417039001,Fracture dislocation of joint of shoulder girdle
 42636007,Closed fracture of upper end of humerus
+42790007,Manual reduction of closed fracture of lateral epicondyle of humerus
 43295006,Closed fracture of humerus
+439215002,Closed reduction of fracture of medial epicondyle of humerus
 439424008,Closed reduction of fracture of proximal humerus
+440315009,Closed reduction of fracture of shaft of humerus
+440366004,Closed fracture of the medial epicondyle of humerus
+440412008,Closed reduction of supracondylar fracture of humerus
 440438008,Closed reduction of dislocation of shoulder joint and fracture of surgical neck of humerus
+440531000,Closed reduction of fracture of medial condyle of humerus
 440553003,Closed reduction of dislocation of shoulder joint and fracture of anatomical neck of humerus
+440559004,Closed reduction of fracture of lateral epicondyle of humerus
+440570006,Closed reduction of fracture of lateral condyle of humerus
+440709006,Closed reduction of transcondylar fracture of humerus
 441309001,Closed reduction of fracture of greater tuberosity of humerus
+441496000,Transcondylar fracture of distal humerus
+452341000000100,"[X]Fracture of shoulder and upper arm, unspecified"
+46131000087103,Fracture of distal end of left humerus
+46161000087105,Fracture of distal end of right humerus
 46271000087105,Fracture of proximal end of left humerus
 46301000087108,Fracture of proximal end of right humerus
+47951000087108,Fracture of shaft of left humerus
+47991000087103,Fracture of shaft of right humerus
+480311000000109,[X]Fracture of other parts of shoulder and upper arm
 48201000087104,Fracture of head of left humerus
 48221000087105,Fracture of head of right humerus
+50890004,Fracture of shaft of humerus
+52928008,Manual reduction of closed fracture of medial epicondyle of humerus
 54451000087107,Fracture of surgical neck of left humerus
 54461000087105,Fracture of surgical neck of right humerus
-54567007,Open fracture of surgical neck of humerus
+54961000,Manual reduction of closed fracture of lateral condyle of humerus
 56598007,Open reduction of closed greater tuberosity fracture
-576171000000101,"Open fracture of proximal humerus, unspecified part"
-576181000000104,Open fracture of proximal humerus not otherwise specified
 576191000000102,Closed fracture of humerus NOS
+576201000000100,"Closed fracture of humerus, shaft or unspecified part NOS"
+58580000,Closed supracondylar fracture of humerus
 606041000000107,Fracture of humerus NOS
+608818008,Open reduction of epiphyseal fracture of humerus with internal fixation
 623691000000107,Closed fracture of proximal humerus not otherwise specified
+623711000000109,"Closed fracture of humerus, shaft or unspecified part"
 625211000000101,"Closed fracture of proximal humerus, unspecified part"
+64005007,Manual reduction of closed transcondylar fracture of humerus with traction
 66308002,Fracture of humerus
+700147004,Avulsion fracture of medial epicondyle of humerus
 703947004,Closed fracture of lesser tuberosity of humerus
-704014000,Open fracture of lesser tuberosity of humerus
+704062006,Stress fracture of humerus
+704210003,Closed fracture of shoulder
+704248008,Pathologic fracture of humerus at site of neoplasm
+704286004,Secondary osteoporotic fracture of humerus
+704335006,Osteoporotic fracture of humerus
+704410001,Closed transcondylar fracture of distal humerus
+705076001,Closed fracture of epiphyseal plate of distal humerus
+70696006,Open reduction of closed humeral fracture with internal skeletal fixation
+708963009,Open reduction of fracture of humerus and internal fixation using Kirschner wire
+73156009,Closed reduction of fracture of humerus with internal fixation
 73244003,Closed fracture of surgical neck of humerus
 733405006,Fracture of surgical neck of humerus
 733406007,Fracture of greater tuberosity of humerus
 733407003,Fracture of lesser tuberosity of humerus
+733408008,Fracture of lateral condyle of humerus
+733409000,Fracture of medial condyle of humerus
+733410005,Multiple fractures of humerus
+787949002,Neer classification of fracture of proximal humerus one-part fracture
+787950002,Neer classification of fracture of proximal humerus two-part fracture
+787951003,Neer classification of fracture of proximal humerus three-part fracture
+787953000,Neer classification of fracture of proximal humerus four-part fracture
+787954006,Closed Neer classification of fracture of proximal humerus four-part fracture
+787957004,Closed Neer classification of fracture of proximal humerus three-part fracture
 788936005,Fracture of anatomical neck of humerus
 788938006,Fracture of head of humerus
-86844009,Open fracture of upper end of humerus
+80767005,Closed fracture of condyle of humerus
+81337008,Manual reduction of closed dislocation of shoulder joint with fracture of greater tuberosity of humerus
+81389003,Manual reduction of closed transcondylar fracture of humerus
+821681000000101,Pathological fracture of humerus
+85813009,Open reduction of fracture of humerus
+89287000,Open reduction of closed humeral fracture with external skeletal fixation
+90235006,Closed fracture of shaft of humerus
+90358006,Closed reduction of fracture of humerus without internal fixation
