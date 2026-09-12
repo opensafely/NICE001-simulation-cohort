@@ -17,3 +17,10 @@ actions:
       highly_sensitive:
         cohort_with_dxa_flags: output/qfracture_cohort_with_dxa_flags.dta
         dxa_eligible_population: output/dxa_eligible_population.dta
+
+  create_table1_dxa:
+    run: stata-mp:v1 analysis/table1_dxa.do
+    needs: [identify_dxa_eligible]
+    outputs:
+      moderately_sensitive:
+        table1_qfracture: output/table1_dxa.csv  

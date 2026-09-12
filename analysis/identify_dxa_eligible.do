@@ -82,14 +82,14 @@ replace qf_alcohol_cat6 = 5 if class == ">9 units/day"
 
 generate double alcohol_units_day = alcohol_numeric if unit == "units/day" & alcohol_numeric_code == alcohol_code & alcohol_date == alcohol_numeric_date & alcohol_numeric >= 0 & !missing(alcohol_numeric)
 replace alcohol_units_day = alcohol_numeric/7 if unit == "units/week" & alcohol_numeric_code == alcohol_code & alcohol_date == alcohol_numeric_date & alcohol_numeric >= 0 & !missing(alcohol_numeric)
-replace qf_alcohol_cat6 = 0 if class == "Current_unknown" & alcohol_units_day == 0
-replace qf_alcohol_cat6 = 1 if class == "Current_unknown" & alcohol_units_day > 0 & alcohol_units_day < 1
-replace qf_alcohol_cat6 = 2 if class == "Current_unknown" & alcohol_units_day >= 1 & alcohol_units_day < 3
-replace qf_alcohol_cat6 = 3 if class == "Current_unknown" & alcohol_units_day >= 3 & alcohol_units_day < 7
-replace qf_alcohol_cat6 = 4 if class == "Current_unknown" & alcohol_units_day >= 7 & alcohol_units_day <= 9
-replace qf_alcohol_cat6 = 5 if class == "Current_unknown" & alcohol_units_day > 9
+replace qf_alcohol_cat6 = 0 if class == "Current_unknown" & alcohol_units_day == 0 & !missing(alcohol_units_day) 
+replace qf_alcohol_cat6 = 1 if class == "Current_unknown" & alcohol_units_day > 0 & alcohol_units_day < 1 & !missing(alcohol_units_day) 
+replace qf_alcohol_cat6 = 2 if class == "Current_unknown" & alcohol_units_day >= 1 & alcohol_units_day < 3 & !missing(alcohol_units_day) 
+replace qf_alcohol_cat6 = 3 if class == "Current_unknown" & alcohol_units_day >= 3 & alcohol_units_day < 7 & !missing(alcohol_units_day) 
+replace qf_alcohol_cat6 = 4 if class == "Current_unknown" & alcohol_units_day >= 7 & alcohol_units_day <= 9 & !missing(alcohol_units_day) 
+replace qf_alcohol_cat6 = 5 if class == "Current_unknown" & alcohol_units_day > 9 & !missing(alcohol_units_day) 
 generate byte alcohol_current_unknown = alcohol_no_record == 0 & class == "Current_unknown" & missing(qf_alcohol_cat6)
-drop class
+drop class unit
 
 *Smoking 
 generate byte smoking_no_record = strtrim(smoking_code) == ""
@@ -105,12 +105,12 @@ replace qf_smoke_cat = 3 if class == 4
 replace qf_smoke_cat = 4 if class == 5
 
 generate double smoke_units_day = smoking_numeric if unit == "units/day" & smoking_numeric_code == smoking_code & smoking_date == smoking_numeric_date & smoking_numeric >= 0 & !missing(smoking_numeric)
-replace smoke_units_day = smoking_numeric/365.25 if unit == "units/year" & smoking_numeric_code == smoking_code & smoking_date == smoking_numeric_date & smoking_numeric >= 0 & !missing(smoking_numeric)
-replace qf_smoke_cat = 2 if class == 2 & smoking_numeric < 10
-replace qf_smoke_cat = 3 if class == 2 & smoking_numeric >= 10 & smoking_numeric < 20
-replace qf_smoke_cat = 4 if class == 2  & smoking_numeric >= 20
-generate byte smoking_current_unknown = !smoking_no_record & class == 2 & missing(qf_smoke_cat)
-drop class
+replace qf_smoke_cat = 0 if class == 2 & smoke_units_day == 0
+replace qf_smoke_cat = 2 if class == 2 & smoke_units_day > 0 & smoke_units_day < 10 & !missing(smoke_units_day)
+replace qf_smoke_cat = 3 if class == 2 & smoke_units_day >= 10 & smoke_units_day < 20 & !missing(smoke_units_day)
+replace qf_smoke_cat = 4 if class == 2  & smoke_units_day >= 20 & !missing(smoke_units_day)
+generate byte smoking_current_unknown = smoking_no_record == 0 & class == 2 & missing(qf_smoke_cat)
+drop class unit
 
 /* Ethnicity mapping from SUS follows the QFracture array order:
       1 White, 2 Indian, 3 Pakistani, 4 Bangladeshi, 5 Other Asian,
@@ -150,7 +150,7 @@ replace b_carehome = 1 if carehome_nursing == 1 | carehome_no_nursing == 1
 do "analysis/calculate_qfracture_mof.do"
 
 *Construct Route 2 and final DXA eligibility
-generate byte route2 = (rx_osteoporosis_b4 == 0 & qfracture_calculable == 1 & qfracture_mof_10y_pct >= 10)
+generate byte route2 = (rx_osteoporosis_b4 == 0 & qfracture_calculable == 1 & !missing(qfracture_mof_10y_pct) & qfracture_mof_10y_pct >= 10)
 generate byte dxa_eligible = (route1 == 1 | route2 == 1)
 
 
@@ -170,27 +170,27 @@ quietly count if rx_osteoporosis_b4 == 0
 display "Treatment-free population: " r(N)
 
 *QFracture calculability
-quietly count if rx_osteoporosis_b4 == 0 & qfracture_calculable != 1
-display "Excluded because baseline QFracture is not calculable: " r(N)
+quietly count if rx_osteoporosis_b4 == 0 & qfracture_calculable == 1
+display "Baseline QFracture is calculable: " r(N)
 
-*Individual reasons: these counts are not mutually exclusive
+*Individual reasons
 quietly count if rx_osteoporosis_b4 == 0 & qf_age_problem == 1
 display "  Missing or invalid age: " r(N)
 
-quietly count if rx_osteoporosis_b4 == 0 & qf_sex_problem == 1
+quietly count if rx_osteoporosis_b4 == 0 & qf_age_problem == 1 & qf_sex_problem == 1
 display "  Sex not male or female (mixed/unknown/missing): " r(N)
 
-quietly count if rx_osteoporosis_b4 == 0 & qf_bmi_problem == 1
+quietly count if rx_osteoporosis_b4 == 0 & qf_age_problem == 1 & qf_sex_problem == 1 & qf_bmi_problem == 1
 display "  Missing or invalid BMI: " r(N)
 
-quietly count if rx_osteoporosis_b4 == 0 & alcohol_no_record == 1
+quietly count if rx_osteoporosis_b4 == 0 & qf_age_problem == 1 & qf_sex_problem == 1 & qf_bmi_problem == 1 & alcohol_no_record == 1
 display "  No alcohol record: " r(N)
-quietly count if rx_osteoporosis_b4 == 0 & alcohol_current_unknown == 1
+quietly count if rx_osteoporosis_b4 == 0 & qf_age_problem == 1 & qf_sex_problem == 1 & qf_bmi_problem == 1 & alcohol_current_unknown == 1
 display "  Alcohol consumption level unknown: " r(N)
 
-quietly count if rx_osteoporosis_b4 == 0 & smoking_no_record == 1
+quietly count if rx_osteoporosis_b4 == 0 & qf_age_problem == 1 & qf_sex_problem == 1 & qf_bmi_problem == 1 & alcohol_current_unknown == 1 & smoking_no_record == 1
 display "  No smoking record: " r(N)
-quietly count if rx_osteoporosis_b4 == 0 & smoking_current_unknown == 1
+quietly count if rx_osteoporosis_b4 == 0 & qf_age_problem == 1 & qf_sex_problem == 1 & qf_bmi_problem == 1 & alcohol_current_unknown == 1 & smoking_current_unknown == 1
 display "  Smoking level unknown: " r(N)
 
 *Identify patients with at least one listed reason *
