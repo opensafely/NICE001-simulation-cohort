@@ -14,6 +14,7 @@ local numeric_variables ///
     rx_hrt_n_6m rx_corticosteroid_n_6m ///
     dx_hip_fracture_n dx_vertebral_fracture_n ///
     dx_wrist_fracture_n dx_proximal_humerus_fracture_n
+
 foreach variable of local numeric_variables {
         destring `variable', replace
 }
@@ -28,6 +29,7 @@ local boolean_variables ///
 	dx_vertebral_fracture dx_vertebral_fracture_hos ///
 	dx_wrist_fracture dx_wrist_fracture_hos ///
 	dx_proximal_humerus_fracture dx_proximal_humerus_fracture_hos 
+
 foreach variable of local boolean_variables {
     tempvar parsed_boolean
     generate byte `parsed_boolean' = .
@@ -41,9 +43,16 @@ foreach variable of local boolean_variables {
 *
 
 *Construct Route 1 from fracture history
+foreach variable in ///
+    dx_hip_fracture_n ///
+    dx_vertebral_fracture_n ///
+    dx_wrist_fracture_n ///
+    dx_proximal_humerus_fracture_n { 
+    assert inrange(`variable', 0, 2)
+}
 generate byte route1a = inrange(dx_hip_fracture_n, 1, 2) | inrange(dx_vertebral_fracture_n, 1, 2)
 generate byte route1b = (dx_wrist_fracture_n + dx_proximal_humerus_fracture_n >= 2)
-generate byte route1 = route1a | route1b
+generate byte route1 = (rx_osteoporosis_b4 == 0) & (route1a == 1 | route1b == 1)
 
 *Derive medication-based QFracture predictors
 generate byte b_antidepressant = rx_antidepressant_n_6m >= 2 if !missing(rx_antidepressant_n_6m)
@@ -58,11 +67,13 @@ replace qf_bmi = 20 if qf_bmi < 20 & qf_bmi <.
 replace qf_bmi = 40 if qf_bmi > 40 & qf_bmi <.
 
 *Alcohol
+generate byte alcohol_no_record = strtrim(alcohol_code) == ""
 generate byte qf_alcohol_cat6 = .
 rename alcohol_code code 
 merge m:1 code using "codelists/uploaded/user-xixiong-alcohol-with-class.dta", keep(1 3) nogen
 rename code alcohol_code
 rename term alcohol_term
+generate byte alcohol_current_unknown = !alcohol_no_record & class == "Current_unknown"
 replace qf_alcohol_cat6 = 0 if class == "None"
 replace qf_alcohol_cat6 = 1 if class == "<1 unit/day"
 replace qf_alcohol_cat6 = 2 if class == "1-2 units/day"
@@ -72,11 +83,13 @@ replace qf_alcohol_cat6 = 5 if class == ">9 units/day"
 drop class
 
 *Smoking 
+generate byte smoking_no_record = strtrim(smoking_code) == ""
 generate byte qf_smoke_cat = .
 rename smoking_code code
 merge m:1 code using "codelists/uploaded/user-xixiong-smoking-with-class.dta", keep(1 3) nogen
 rename code smoking_code
 rename term smoking_term
+generate byte smoking_current_unknown = !smoking_no_record & class == 2
 replace qf_smoke_cat = 0 if class == 0
 replace qf_smoke_cat = 1 if class == 1
 replace qf_smoke_cat = 2 if class == 3
@@ -113,6 +126,7 @@ replace qf_ethrisk = 6 if upper(strtrim(ethnicity_sus_code)) == "M" & qf_ethrisk
 replace qf_ethrisk = 7 if upper(strtrim(ethnicity_sus_code)) == "N" & qf_ethrisk == .
 replace qf_ethrisk = 8 if upper(strtrim(ethnicity_sus_code)) == "R" & qf_ethrisk == .
 replace qf_ethrisk = 9 if inlist(upper(strtrim(ethnicity_sus_code)), "D", "E", "F", "G", "P", "S") & qf_ethrisk == .
+replace qf_ethrisk = 1 if missing(qf_ethrisk)
 
 *carehome
 replace b_carehome = 1 if carehome_nursing == 1 | carehome_no_nursing == 1
@@ -121,17 +135,16 @@ replace b_carehome = 1 if carehome_nursing == 1 | carehome_no_nursing == 1
 do "analysis/calculate_qfracture_mof.do"
 
 *Construct Route 2 and final DXA eligibility
-generate byte route2 = (rx_osteoporosis_b4 == 0 & qfracture_calculable == 1 & route1 == 0 & qfracture_mof_10y_pct >= 10)
-
-generate byte analysis_eligible = rx_osteoporosis_b4 == 0 & qfracture_calculable == 1 
-generate byte dxa_eligible = analysis_eligible & (route1 | route2)
-
-generate byte dxa_route = .
-replace dxa_route = 1 if analysis_eligible & route1 == 1
-replace dxa_route = 2 if analysis_eligible & route2 == 1
+generate byte route2 = (rx_osteoporosis_b4 == 0 & qfracture_calculable == 1 & qfracture_mof_10y_pct >= 10)
+generate byte dxa_eligible = (route1 == 1 | route2 == 1)
 
 
-/* 11. Display cohort flow and save patient-level outputs --------------- */
+/*Display cohort flow and save patient-level outputs --------------- */
+* Reasons why QFracture may not be calculable
+generate byte qf_age_problem = missing(age) | !inrange(age, 50, 99)
+generate byte qf_sex_problem = !inlist(lower(strtrim(sex)), "male", "female")
+generate byte qf_bmi_problem = missing(qf_bmi)
+
 quietly count
 display "Source population: " r(N)
 
@@ -141,16 +154,47 @@ display "Excluded for baseline osteoporosis treatment: " r(N)
 quietly count if rx_osteoporosis_b4 == 0
 display "Treatment-free population: " r(N)
 
-quietly count if rx_osteoporosis_b4 == 0 & qfracture_calculable == 0
+*QFracture calculability
+quietly count if rx_osteoporosis_b4 == 0 & qfracture_calculable != 1
 display "Excluded because baseline QFracture is not calculable: " r(N)
 
-quietly count if analysis_eligible == 1
-display "Final analysis-eligible population: " r(N)
+*Individual reasons: these counts are not mutually exclusive
+quietly count if rx_osteoporosis_b4 == 0 & qf_age_problem == 1
+display "  Missing or invalid age: " r(N)
 
-quietly count if rx_osteoporosis_b4 == 0 & route1 == 1
-display "Treatment-free patients meeting Route 1 before risk-data exclusion: " r(N)
+quietly count if rx_osteoporosis_b4 == 0 & qf_sex_problem == 1
+display "  Sex not male or female (mixed/unknown/missing): " r(N)
 
-quietly count if analysis_eligible == 1 & route1 == 1
+quietly count if rx_osteoporosis_b4 == 0 & qf_bmi_problem == 1
+display "  Missing or invalid BMI: " r(N)
+
+quietly count if rx_osteoporosis_b4 == 0 & alcohol_no_record == 1
+display "  No alcohol record: " r(N)
+quietly count if rx_osteoporosis_b4 == 0 & alcohol_current_unknown == 1
+display "  Alcohol consumption level unknown: " r(N)
+
+quietly count if rx_osteoporosis_b4 == 0 & smoking_no_record == 1
+display "  No smoking record: " r(N)
+quietly count if rx_osteoporosis_b4 == 0 & smoking_current_unknown == 1
+display "  Smoking level unknown: " r(N)
+
+*Identify patients with at least one listed reason *
+generate byte qf_listed_missing_reason = ///
+    qf_age_problem == 1 | ///
+    qf_sex_problem == 1 | ///
+    qf_bmi_problem == 1 | ///
+    alcohol_no_record == 1 | ///
+    alcohol_current_unknown == 1 | ///
+    smoking_no_record == 1 | ///
+    smoking_current_unknown == 1
+
+quietly count if rx_osteoporosis_b4 == 0 & ///
+    qfracture_calculable != 1 & ///
+    qf_listed_missing_reason == 1
+display "Non-calculable with at least one listed reason: " r(N)
+
+* Final populations
+quietly count if route1 == 1
 display "DXA eligible through Route 1: " r(N)
 
 quietly count if route2 == 1
@@ -166,3 +210,9 @@ preserve
 keep if dxa_eligible == 1
 save "output/dxa_eligible_population.dta", replace
 restore
+
+
+
+
+
+
