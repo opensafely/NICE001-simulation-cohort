@@ -73,13 +73,22 @@ rename alcohol_code code
 merge m:1 code using "codelists/uploaded/user-xixiong-alcohol-with-class.dta", keep(1 3) nogen
 rename code alcohol_code
 rename term alcohol_term
-generate byte alcohol_current_unknown = !alcohol_no_record & class == "Current_unknown"
 replace qf_alcohol_cat6 = 0 if class == "None"
 replace qf_alcohol_cat6 = 1 if class == "<1 unit/day"
 replace qf_alcohol_cat6 = 2 if class == "1-2 units/day"
 replace qf_alcohol_cat6 = 3 if class == "3-6 units/day"
 replace qf_alcohol_cat6 = 4 if class == "7-9 units/day"
 replace qf_alcohol_cat6 = 5 if class == ">9 units/day"
+
+generate double alcohol_units_day = alcohol_numeric if unit == "units/day" & alcohol_numeric_code == alcohol_code & alcohol_date == alcohol_numeric_date & alcohol_numeric >= 0 & !missing(alcohol_numeric)
+replace alcohol_units_day = alcohol_numeric/7 if unit == "units/week" & alcohol_numeric_code == alcohol_code & alcohol_date == alcohol_numeric_date & alcohol_numeric >= 0 & !missing(alcohol_numeric)
+replace qf_alcohol_cat6 = 0 if class == "Current_unknown" & alcohol_units_day == 0
+replace qf_alcohol_cat6 = 1 if class == "Current_unknown" & alcohol_units_day > 0 & alcohol_units_day < 1
+replace qf_alcohol_cat6 = 2 if class == "Current_unknown" & alcohol_units_day >= 1 & alcohol_units_day < 3
+replace qf_alcohol_cat6 = 3 if class == "Current_unknown" & alcohol_units_day >= 3 & alcohol_units_day < 7
+replace qf_alcohol_cat6 = 4 if class == "Current_unknown" & alcohol_units_day >= 7 & alcohol_units_day <= 9
+replace qf_alcohol_cat6 = 5 if class == "Current_unknown" & alcohol_units_day > 9
+generate byte alcohol_current_unknown = alcohol_no_record == 0 & class == "Current_unknown" & missing(qf_alcohol_cat6)
 drop class
 
 *Smoking 
@@ -89,12 +98,18 @@ rename smoking_code code
 merge m:1 code using "codelists/uploaded/user-xixiong-smoking-with-class.dta", keep(1 3) nogen
 rename code smoking_code
 rename term smoking_term
-generate byte smoking_current_unknown = !smoking_no_record & class == 2
 replace qf_smoke_cat = 0 if class == 0
 replace qf_smoke_cat = 1 if class == 1
 replace qf_smoke_cat = 2 if class == 3
 replace qf_smoke_cat = 3 if class == 4
 replace qf_smoke_cat = 4 if class == 5
+
+generate double smoke_units_day = smoking_numeric if unit == "units/day" & smoking_numeric_code == smoking_code & smoking_date == smoking_numeric_date & smoking_numeric >= 0 & !missing(smoking_numeric)
+replace smoke_units_day = smoking_numeric/365.25 if unit == "units/year" & smoking_numeric_code == smoking_code & smoking_date == smoking_numeric_date & smoking_numeric >= 0 & !missing(smoking_numeric)
+replace qf_smoke_cat = 2 if class == 2 & smoking_numeric < 10
+replace qf_smoke_cat = 3 if class == 2 & smoking_numeric >= 10 & smoking_numeric < 20
+replace qf_smoke_cat = 4 if class == 2  & smoking_numeric >= 20
+generate byte smoking_current_unknown = !smoking_no_record & class == 2 & missing(qf_smoke_cat)
 drop class
 
 /* Ethnicity mapping from SUS follows the QFracture array order:
