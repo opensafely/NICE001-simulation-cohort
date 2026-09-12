@@ -4,21 +4,53 @@ clear all
 set more off
 
 use "output/qfracture_cohort_with_dxa_flags.dta", clear
-preserve
 
-generate byte table_previous_fracture = .
-replace table_previous_fracture = 1 if inrange(dx_hip_fracture_n, 1, 2) 
-replace table_previous_fracture = 2 if inrange(dx_vertebral_fracture_n, 1, 2) 
-replace table_previous_fracture = 3 if inrange(dx_wrist_fracture_n, 1, 2) 
-replace table_previous_fracture = 4 if inrange(dx_proximal_humerus_fracture_n, 1, 2)
+*OpenSAFELY disclosure-control programs 
 
-label define table_previous_fracture_label ///
-	1 "Hip fracture" ///
-	2 "Vertebral fracture" ///
-	3 "Wrist fracture" ///
-	4 "Proximal humerus fracture" 
-label values table_previous_fracture table_previous_fracture_label
-label variable table_previous_fracture "Previous fracture"
+/*Counts of 1–7 are redacted. Other counts are rounded to the nearest 5. Zero is retained.*/
+capture program drop sdc_count
+program define sdc_count, rclass
+    syntax, Count(real)
+    if inrange(`count', 1, 7) {
+        return local cell "[REDACTED]"
+        exit
+    }
+    local count_rounded = round(`count', 5)
+    local cell = strtrim(string(`count_rounded', "%12.0fc"))
+    return local cell `"`cell'"'
+end
+
+/*For n (%), disclosure control is applied to the raw count first.
+The percentage is then calculated from rounded counts.*/
+capture program drop sdc_n_pct
+program define sdc_n_pct, rclass
+    syntax, Count(real) Denominator(real)
+    if inrange(`count', 1, 7) | inrange(`denominator', 1, 7) {
+        return local cell "[REDACTED]"
+        exit
+    }
+
+    if `denominator' <= 0 {
+        return local cell "NA"
+        exit
+    }
+
+    local count_rounded = round(`count', 5)
+    local denominator_rounded = round(`denominator', 5)
+    local percentage = 100 * `count_rounded' / `denominator_rounded'
+    local cell = strtrim(string(`count_rounded', "%12.0fc")) + " (" + strtrim(string(`percentage', "%5.1f")) + "%)"
+    return local cell `"`cell'"'
+end
+
+generate byte prev_hip = inrange(dx_hip_fracture_n, 1, 2)
+generate byte prev_vertebral = inrange(dx_vertebral_fracture_n, 1, 2)
+generate byte prev_wrist = inrange(dx_wrist_fracture_n, 1, 2)
+generate byte prev_humerus = inrange(dx_proximal_humerus_fracture_n, 1, 2)
+
+label variable prev_hip "Previous hip fracture"
+label variable prev_vertebral "Previous vertebral fracture"
+label variable prev_wrist "Previous wrist fracture"
+label variable prev_humerus "Previous proximal humerus fracture"
 
 generate byte table_sex = .
 replace table_sex = 1 if lower(strtrim(sex)) == "female"
@@ -107,12 +139,14 @@ postfile `table1_post' ///
     str30 overall ///
     str30 dxa_eligible ///
     using `table1_results', replace
-
 local order = 1
 
 /* Population size */
-local overall_cell = string(`N_overall', "%12.0fc")
-local high_cell = string(`N_high', "%12.0fc")
+sdc_count, count(`N_overall')
+local overall_cell `"`r(cell)'"'
+
+sdc_count, count(`N_high')
+local high_cell `"`r(cell)'"'
 
 post `table1_post' ///
     (`order') ///
@@ -120,7 +154,6 @@ post `table1_post' ///
     ("") ///
     ("`overall_cell'") ///
     ("`high_cell'")
-
 local order = `order' + 1
 
 /* Continuous-variable helper: mean (SD) */
@@ -130,9 +163,35 @@ program define table1_continuous
     local row_label : variable label `varlist'
 
     quietly summarize `varlist'
-    local overall_cell = string(r(mean), "%9.1f") + " (" + string(r(sd), "%9.1f") + ")"
+    local n_overall = r(N)
+    local mean_overall = r(mean)
+    local sd_overall = r(sd)
+
+    if `n_overall' == 0 {
+        local overall_cell = "NA"
+    }
+    else if inrange(`n_overall', 1, 7) {
+        local overall_cell = "[REDACTED]"
+    }
+    else {
+        local overall_cell = strtrim(string(`mean_overall', "%9.1f")) + " (" + strtrim(string(`sd_overall', "%9.1f")) + ")"
+    }
+
+    /* DXA-eligible population */
     quietly summarize `varlist' if dxa_eligible == 1
-    local high_cell = string(r(mean), "%9.1f") + " (" + string(r(sd), "%9.1f") + ")"
+    local n_high = r(N)
+    local mean_high = r(mean)
+    local sd_high = r(sd)
+
+    if `n_high' == 0 {
+        local high_cell = "NA"
+    }
+    else if inrange(`n_high', 1, 7) {
+        local high_cell = "[REDACTED]"
+    }
+    else {
+        local high_cell = strtrim(string(`mean_high', "%9.1f")) + " (" + strtrim(string(`sd_high', "%9.1f")) + ")"
+    }
 
     post `handle' ///
         (`order') ///
@@ -156,18 +215,16 @@ program define table1_category
 
     quietly count if `varlist' == `value'
     local number_overall = r(N)
-    local overall_cell = string(`number_overall', "%12.0fc") + " (" + ///
-        string(100 * `number_overall' / `noverall', "%5.1f") + "%)"
 
+    sdc_n_pct, count(`number_overall') denominator(`noverall')
+    local overall_cell `"`r(cell)'"'
+
+    /* DXA-eligible population */
     quietly count if `varlist' == `value' & dxa_eligible == 1
     local number_high = r(N)
-    if `nhigh' > 0 {
-        local high_cell = string(`number_high', "%12.0fc") + " (" + ///
-            string(100 * `number_high' / `nhigh', "%5.1f") + "%)"
-    }
-    else {
-        local high_cell = "0 (NA)"
-    }
+
+    sdc_n_pct, count(`number_high') denominator(`nhigh')
+    local high_cell `"`r(cell)'"'
 
     post `handle' ///
         (`order') ///
@@ -241,26 +298,27 @@ local binary_predictors ///
     fh_osteoporosis ///
     b_antidepressant ///
     b_corticosteroids ///
-    b_hrt_oest 
+    b_hrt_oest ///
+    prev_hip ///
+    prev_vertebral ///
+    prev_wrist ///
+    prev_humerus
 
 foreach variable of local binary_predictors {
+    local row_label : variable label `variable'    
     quietly count if `variable' == 1
     local number_overall = r(N)
 
-    local overall_cell = string(`number_overall', "%12.0fc") + " (" + ///
-        string(100 * `number_overall' / `N_overall', "%5.1f") + "%)"
+    sdc_n_pct, count(`number_overall') denominator(`N_overall')
+    local overall_cell `"`r(cell)'"'
 
+    /* DXA-eligible population */
     quietly count if `variable' == 1 & dxa_eligible == 1
     local number_high = r(N)
-    if `N_high' > 0 {
-        local high_cell = string(`number_high', "%12.0fc") + " (" + ///
-            string(100 * `number_high' / `N_high', "%5.1f") + "%)"
-    }
-    else {
-        local high_cell = "0 (NA)"
-    }
-    
-	local row_label : variable label `variable'
+
+    sdc_n_pct, count(`number_high') denominator(`N_high')
+    local high_cell `"`r(cell)'"'
+
     post `table1_post' ///
         (`order') ///
         (`"`row_label'"') ///
@@ -270,23 +328,10 @@ foreach variable of local binary_predictors {
     local order = `order' + 1
 }
 
-/* Previous fracture */
-forvalues value = 1/4 {
-    table1_category table_previous_fracture, ///
-        value(`value') ///
-        handle(`table1_post') ///
-        order(`order') ///
-        noverall(`N_overall') ///
-        nhigh(`N_high')
-    local order = `order' + 1
-}
-
 postclose `table1_post'
 
-/* Export Table 1 */
 use `table1_results', clear
 sort row_order
 drop row_order
-
 export delimited using "output/table1_dxa.csv", replace
-restore
+
