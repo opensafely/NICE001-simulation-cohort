@@ -177,20 +177,20 @@ display "Baseline QFracture is calculable: " r(N)
 quietly count if rx_osteoporosis_b4 == 0 & qf_age_problem == 1
 display "  Missing or invalid age: " r(N)
 
-quietly count if rx_osteoporosis_b4 == 0 & qf_age_problem == 1 & qf_sex_problem == 1
+quietly count if rx_osteoporosis_b4 == 0 & qf_age_problem == 0 & qf_sex_problem == 1
 display "  Sex not male or female (mixed/unknown/missing): " r(N)
 
-quietly count if rx_osteoporosis_b4 == 0 & qf_age_problem == 1 & qf_sex_problem == 1 & qf_bmi_problem == 1
+quietly count if rx_osteoporosis_b4 == 0 & qf_age_problem == 0 & qf_sex_problem == 0 & qf_bmi_problem == 1
 display "  Missing or invalid BMI: " r(N)
 
-quietly count if rx_osteoporosis_b4 == 0 & qf_age_problem == 1 & qf_sex_problem == 1 & qf_bmi_problem == 1 & alcohol_no_record == 1
+quietly count if rx_osteoporosis_b4 == 0 & qf_age_problem == 0 & qf_sex_problem == 0 & qf_bmi_problem == 0 & alcohol_no_record == 1
 display "  No alcohol record: " r(N)
-quietly count if rx_osteoporosis_b4 == 0 & qf_age_problem == 1 & qf_sex_problem == 1 & qf_bmi_problem == 1 & alcohol_current_unknown == 1
+quietly count if rx_osteoporosis_b4 == 0 & qf_age_problem == 0 & qf_sex_problem == 0 & qf_bmi_problem == 0 & alcohol_current_unknown == 1
 display "  Alcohol consumption level unknown: " r(N)
 
-quietly count if rx_osteoporosis_b4 == 0 & qf_age_problem == 1 & qf_sex_problem == 1 & qf_bmi_problem == 1 & alcohol_current_unknown == 1 & smoking_no_record == 1
+quietly count if rx_osteoporosis_b4 == 0 & qf_age_problem == 0 & qf_sex_problem == 0 & qf_bmi_problem == 0 & alcohol_current_unknown == 0 & smoking_no_record == 1
 display "  No smoking record: " r(N)
-quietly count if rx_osteoporosis_b4 == 0 & qf_age_problem == 1 & qf_sex_problem == 1 & qf_bmi_problem == 1 & alcohol_current_unknown == 1 & smoking_current_unknown == 1
+quietly count if rx_osteoporosis_b4 == 0 & qf_age_problem == 0 & qf_sex_problem == 0 & qf_bmi_problem == 0 & alcohol_current_unknown == 0 & smoking_current_unknown == 1
 display "  Smoking level unknown: " r(N)
 
 *Identify patients with at least one listed reason *

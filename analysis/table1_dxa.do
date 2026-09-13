@@ -6,7 +6,6 @@ set more off
 use "output/qfracture_cohort_with_dxa_flags.dta", clear
 
 *OpenSAFELY disclosure-control programs 
-
 /*Counts of 1–7 are redacted. Other counts are rounded to the nearest 5. Zero is retained.*/
 capture program drop sdc_count
 program define sdc_count, rclass
@@ -42,16 +41,7 @@ program define sdc_n_pct, rclass
     return local cell `"`cell'"'
 end
 
-generate byte prev_hip = inrange(dx_hip_fracture_n, 1, 2)
-generate byte prev_vertebral = inrange(dx_vertebral_fracture_n, 1, 2)
-generate byte prev_wrist = inrange(dx_wrist_fracture_n, 1, 2)
-generate byte prev_humerus = inrange(dx_proximal_humerus_fracture_n, 1, 2)
-
-label variable prev_hip "Previous hip fracture"
-label variable prev_vertebral "Previous vertebral fracture"
-label variable prev_wrist "Previous wrist fracture"
-label variable prev_humerus "Previous proximal humerus fracture"
-
+*Derived Table 1 variables
 generate byte table_sex = .
 replace table_sex = 1 if lower(strtrim(sex)) == "female"
 replace table_sex = 2 if lower(strtrim(sex)) == "male"
@@ -59,6 +49,42 @@ replace table_sex = 2 if lower(strtrim(sex)) == "male"
 label define table_sex_label 1 "Female" 2 "Male"
 label values table_sex table_sex_label
 label variable table_sex "Sex"
+
+generate byte age_band = .
+replace age_band = 1 if inrange(age, 50, 59)
+replace age_band = 2 if inrange(age, 60, 69)
+replace age_band = 3 if inrange(age, 70, 79)
+replace age_band = 4 if inrange(age, 80, 89)
+replace age_band = 5 if inrange(age, 90, 99)
+
+label define age_band_label ///
+    1 "50-59" ///
+    2 "60-69" ///
+    3 "70-79" ///
+    4 "80-89" ///
+    5 "90-99"
+label values age_band age_band_label
+label variable age_band "Age group, years"
+
+generate byte prev_hip = dx_hip_fracture_n > 0 & !missing(dx_hip_fracture_n)
+generate byte prev_vertebral = dx_vertebral_fracture_n > 0 & !missing(dx_vertebral_fracture_n)
+generate byte prev_wrist = dx_wrist_fracture_n > 0 & !missing(dx_wrist_fracture_n)
+generate byte prev_humerus = dx_proximal_humerus_fracture_n > 0 & !missing(dx_proximal_humerus_fracture_n)
+
+generate byte prev_any = ///
+    prev_hip == 1 | ///
+    prev_vertebral == 1 | ///
+    prev_wrist == 1 | ///
+    prev_humerus == 1
+
+label define prev_any_label 0 "No" 1 "Yes"
+label values prev_any prev_any_label
+label variable prev_any "Previous fracture"
+
+label variable prev_hip "Previous hip fracture"
+label variable prev_vertebral "Previous vertebral fracture"
+label variable prev_wrist "Previous wrist fracture"
+label variable prev_humerus "Previous proximal humerus fracture"
 
 /* QFracture category labels */
 label define table_ethnicity_label ///
@@ -122,11 +148,14 @@ label variable b_corticosteroids    "Oral corticosteroid treatment"
 label variable b_hrt_oest           "Oestrogen-only HRT"
 
 /* Population denominators */
-quietly count
-local N_overall = r(N)
-
 quietly count if dxa_eligible == 1
-local N_high = r(N)
+local N_dxa = r(N)
+
+quietly count if dxa_eligible == 1 & table_sex == 1
+local N_women = r(N)
+
+quietly count if dxa_eligible == 1 & table_sex == 2
+local N_men = r(N)
 
 /* Create results dataset */
 tempname table1_post
@@ -136,24 +165,29 @@ postfile `table1_post' ///
     int row_order ///
     str70 characteristic ///
     str45 category ///
-    str30 overall ///
-    str30 dxa_eligible ///
+    str30 dxa_eligible_patients ///
+    str30 women ///
+    str30 men ///
     using `table1_results', replace
 local order = 1
 
 /* Population size */
-sdc_count, count(`N_overall')
-local overall_cell `"`r(cell)'"'
+sdc_count, count(`N_dxa')
+local dxa_cell `"`r(cell)'"'
 
-sdc_count, count(`N_high')
-local high_cell `"`r(cell)'"'
+sdc_count, count(`N_women')
+local women_cell `"`r(cell)'"'
+
+sdc_count, count(`N_men')
+local men_cell `"`r(cell)'"'
 
 post `table1_post' ///
     (`order') ///
     ("Population, n") ///
     ("") ///
-    ("`overall_cell'") ///
-    ("`high_cell'")
+    ("`dxa_cell'") ///
+    ("`women_cell'") ///
+    ("`men_cell'")
 local order = `order' + 1
 
 /* Continuous-variable helper: mean (SD) */
@@ -162,86 +196,222 @@ program define table1_continuous
     syntax varname, Handle(name) Order(integer)
     local row_label : variable label `varlist'
 
-    quietly summarize `varlist'
-    local n_overall = r(N)
-    local mean_overall = r(mean)
-    local sd_overall = r(sd)
-
-    if `n_overall' == 0 {
-        local overall_cell = "NA"
-    }
-    else if inrange(`n_overall', 1, 7) {
-        local overall_cell = "[REDACTED]"
-    }
-    else {
-        local overall_cell = strtrim(string(`mean_overall', "%9.1f")) + " (" + strtrim(string(`sd_overall', "%9.1f")) + ")"
-    }
-
-    /* DXA-eligible population */
+    /* All DXA-eligible patients */
     quietly summarize `varlist' if dxa_eligible == 1
-    local n_high = r(N)
-    local mean_high = r(mean)
-    local sd_high = r(sd)
+    local n_dxa = r(N)
+    local mean_dxa = r(mean)
+    local sd_dxa = r(sd)
 
-    if `n_high' == 0 {
-        local high_cell = "NA"
+    if `n_dxa' == 0 {
+        local dxa_cell = "NA"
     }
-    else if inrange(`n_high', 1, 7) {
-        local high_cell = "[REDACTED]"
+    else if inrange(`n_dxa', 1, 7) {
+        local dxa_cell = "[REDACTED]"
     }
     else {
-        local high_cell = strtrim(string(`mean_high', "%9.1f")) + " (" + strtrim(string(`sd_high', "%9.1f")) + ")"
+        local dxa_cell = strtrim(string(`mean_dxa', "%9.1f")) + ///
+            " (" + strtrim(string(`sd_dxa', "%9.1f")) + ")"
+    }
+
+    /* Women */
+    quietly summarize `varlist' if dxa_eligible == 1 & table_sex == 1
+    local n_women = r(N)
+    local mean_women = r(mean)
+    local sd_women = r(sd)
+
+    if `n_women' == 0 {
+        local women_cell = "NA"
+    }
+    else if inrange(`n_women', 1, 7) {
+        local women_cell = "[REDACTED]"
+    }
+    else {
+        local women_cell = strtrim(string(`mean_women', "%9.1f")) + ///
+            " (" + strtrim(string(`sd_women', "%9.1f")) + ")"
+    }
+
+    /* Men */
+    quietly summarize `varlist' if dxa_eligible == 1 & table_sex == 2
+    local n_men = r(N)
+    local mean_men = r(mean)
+    local sd_men = r(sd)
+
+    if `n_men' == 0 {
+        local men_cell = "NA"
+    }
+    else if inrange(`n_men', 1, 7) {
+        local men_cell = "[REDACTED]"
+    }
+    else {
+        local men_cell = strtrim(string(`mean_men', "%9.1f")) + ///
+            " (" + strtrim(string(`sd_men', "%9.1f")) + ")"
     }
 
     post `handle' ///
         (`order') ///
         (`"`row_label'"') ///
         ("Mean (SD)") ///
-        ("`overall_cell'") ///
-        ("`high_cell'")
+        ("`dxa_cell'") ///
+        ("`women_cell'") ///
+        ("`men_cell'")
 end
-
-table1_continuous age, handle(`table1_post') order(`order')
-local order = `order' + 1
-table1_continuous qf_bmi, handle(`table1_post') order(`order')
-local order = `order' + 1
 
 /* Categorical-variable helper: n (%) */
 capture program drop table1_category
 program define table1_category
-    syntax varname, Value(integer) Handle(name) Order(integer) NOverall(integer) NHigh(integer)
+    syntax varname, Value(integer) Handle(name) Order(integer) ///
+        Ndxa(integer) Nwomen(integer) Nmen(integer) ///
+        [Characteristic(string) Category(string)]
+
     local row_label : variable label `varlist'
     local category_label : label (`varlist') `value'
 
-    quietly count if `varlist' == `value'
-    local number_overall = r(N)
+    if `"`characteristic'"' != "" {
+        local row_label `"`characteristic'"'
+    }
 
-    sdc_n_pct, count(`number_overall') denominator(`noverall')
-    local overall_cell `"`r(cell)'"'
+    if `"`category'"' != "" {
+        local category_label `"`category'"'
+    }
 
-    /* DXA-eligible population */
+    /* All DXA-eligible patients */
     quietly count if `varlist' == `value' & dxa_eligible == 1
-    local number_high = r(N)
+    local number_dxa = r(N)
 
-    sdc_n_pct, count(`number_high') denominator(`nhigh')
-    local high_cell `"`r(cell)'"'
+    sdc_n_pct, count(`number_dxa') denominator(`ndxa')
+    local dxa_cell `"`r(cell)'"'
+
+    /* Women */
+    quietly count if `varlist' == `value' & dxa_eligible == 1 & table_sex == 1
+    local number_women = r(N)
+
+    sdc_n_pct, count(`number_women') denominator(`nwomen')
+    local women_cell `"`r(cell)'"'
+
+    /* Men */
+    quietly count if `varlist' == `value' & dxa_eligible == 1 & table_sex == 2
+    local number_men = r(N)
+
+    sdc_n_pct, count(`number_men') denominator(`nmen')
+    local men_cell `"`r(cell)'"'
 
     post `handle' ///
         (`order') ///
         (`"`row_label'"') ///
         (`"`category_label'"') ///
-        ("`overall_cell'") ///
-        ("`high_cell'")
+        ("`dxa_cell'") ///
+        ("`women_cell'") ///
+        ("`men_cell'")
 end
 
-/* Sex */
-forvalues value = 1/2 {
+/* Age: mean (SD), followed by age categories */
+table1_continuous age, handle(`table1_post') order(`order')
+local order = `order' + 1
+
+forvalues value = 1/5 {
+    table1_category age_band, ///
+        value(`value') ///
+        handle(`table1_post') ///
+        order(`order') ///
+        ndxa(`N_dxa') ///
+        nwomen(`N_women') ///
+        nmen(`N_men')
+    local order = `order' + 1
+}
+
+/* Sex: male first, followed by female */
+foreach value in 2 1 {
     table1_category table_sex, ///
         value(`value') ///
         handle(`table1_post') ///
         order(`order') ///
-        noverall(`N_overall') ///
-        nhigh(`N_high')
+        ndxa(`N_dxa') ///
+        nwomen(`N_women') ///
+        nmen(`N_men')
+    local order = `order' + 1
+}
+
+/* BMI: mean (SD) */
+table1_continuous qf_bmi, handle(`table1_post') order(`order')
+local order = `order' + 1
+
+/* Previous fracture*/
+foreach value in 1 0 {
+    table1_category prev_any, ///
+        value(`value') ///
+        handle(`table1_post') ///
+        order(`order') ///
+        ndxa(`N_dxa') ///
+        nwomen(`N_women') ///
+        nmen(`N_men')
+    local order = `order' + 1
+}
+
+table1_category prev_hip, ///
+    value(1) ///
+    handle(`table1_post') ///
+    order(`order') ///
+    ndxa(`N_dxa') ///
+    nwomen(`N_women') ///
+    nmen(`N_men') ///
+    characteristic("Previous fracture site") ///
+    category("Hip")
+local order = `order' + 1
+
+table1_category prev_vertebral, ///
+    value(1) ///
+    handle(`table1_post') ///
+    order(`order') ///
+    ndxa(`N_dxa') ///
+    nwomen(`N_women') ///
+    nmen(`N_men') ///
+    characteristic("Previous fracture site") ///
+    category("Vertebral")
+local order = `order' + 1
+
+table1_category prev_wrist, ///
+    value(1) ///
+    handle(`table1_post') ///
+    order(`order') ///
+    ndxa(`N_dxa') ///
+    nwomen(`N_women') ///
+    nmen(`N_men') ///
+    characteristic("Previous fracture site") ///
+    category("Wrist")
+local order = `order' + 1
+
+table1_category prev_humerus, ///
+    value(1) ///
+    handle(`table1_post') ///
+    order(`order') ///
+    ndxa(`N_dxa') ///
+    nwomen(`N_women') ///
+    nmen(`N_men') ///
+    characteristic("Previous fracture site") ///
+    category("Proximal humerus")
+local order = `order' + 1
+
+/* Smoking status */
+forvalues value = 0/4 {
+    table1_category qf_smoke_cat, ///
+        value(`value') ///
+        handle(`table1_post') ///
+        order(`order') ///
+        ndxa(`N_dxa') ///
+        nwomen(`N_women') ///
+        nmen(`N_men')
+    local order = `order' + 1
+}
+
+/* Alcohol consumption */
+forvalues value = 0/5 {
+    table1_category qf_alcohol_cat6, ///
+        value(`value') ///
+        handle(`table1_post') ///
+        order(`order') ///
+        ndxa(`N_dxa') ///
+        nwomen(`N_women') ///
+        nmen(`N_men')
     local order = `order' + 1
 }
 
@@ -251,30 +421,9 @@ forvalues value = 1/9 {
         value(`value') ///
         handle(`table1_post') ///
         order(`order') ///
-        noverall(`N_overall') ///
-        nhigh(`N_high')
-    local order = `order' + 1
-}
-
-/* Alcohol */
-forvalues value = 0/5 {
-    table1_category qf_alcohol_cat6, ///
-        value(`value') ///
-        handle(`table1_post') ///
-        order(`order') ///
-        noverall(`N_overall') ///
-        nhigh(`N_high')
-    local order = `order' + 1
-}
-
-/* Smoking */
-forvalues value = 0/4 {
-    table1_category qf_smoke_cat, ///
-        value(`value') ///
-        handle(`table1_post') ///
-        order(`order') ///
-        noverall(`N_overall') ///
-        nhigh(`N_high')
+        ndxa(`N_dxa') ///
+        nwomen(`N_women') ///
+        nmen(`N_men')
     local order = `order' + 1
 }
 
@@ -298,33 +447,17 @@ local binary_predictors ///
     fh_osteoporosis ///
     b_antidepressant ///
     b_corticosteroids ///
-    b_hrt_oest ///
-    prev_hip ///
-    prev_vertebral ///
-    prev_wrist ///
-    prev_humerus
+    b_hrt_oest
 
 foreach variable of local binary_predictors {
-    local row_label : variable label `variable'    
-    quietly count if `variable' == 1
-    local number_overall = r(N)
-
-    sdc_n_pct, count(`number_overall') denominator(`N_overall')
-    local overall_cell `"`r(cell)'"'
-
-    /* DXA-eligible population */
-    quietly count if `variable' == 1 & dxa_eligible == 1
-    local number_high = r(N)
-
-    sdc_n_pct, count(`number_high') denominator(`N_high')
-    local high_cell `"`r(cell)'"'
-
-    post `table1_post' ///
-        (`order') ///
-        (`"`row_label'"') ///
-        ("Yes") ///
-        ("`overall_cell'") ///
-        ("`high_cell'")
+    table1_category `variable', ///
+        value(1) ///
+        handle(`table1_post') ///
+        order(`order') ///
+        ndxa(`N_dxa') ///
+        nwomen(`N_women') ///
+        nmen(`N_men') ///
+        category("Yes")
     local order = `order' + 1
 }
 
@@ -332,6 +465,12 @@ postclose `table1_post'
 
 use `table1_results', clear
 sort row_order
+/* Display a characteristic label once*/
+generate str70 characteristic_display = characteristic
+replace characteristic_display = "" if _n > 1 & characteristic == characteristic[_n - 1]
+drop characteristic
+rename characteristic_display characteristic
+order characteristic category dxa_eligible_patients women men
 drop row_order
 export delimited using "output/table1_dxa.csv", replace
 
