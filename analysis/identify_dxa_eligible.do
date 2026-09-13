@@ -151,7 +151,7 @@ do "analysis/calculate_qfracture_mof.do"
 
 *Construct Route 2 and final DXA eligibility
 generate byte route2 = (rx_osteoporosis_b4 == 0 & qfracture_calculable == 1 & !missing(qfracture_mof_10y_pct) & qfracture_mof_10y_pct >= 10)
-generate byte dxa_eligible = (route1 == 1 | route2 == 1)
+generate byte dxa_eligible = (route1 == 1 | route2 == 1) & (sex == "female" | sex == "male") 
 
 
 /*Display cohort flow and save patient-level outputs --------------- */
@@ -188,9 +188,9 @@ display "  No alcohol record: " r(N)
 quietly count if rx_osteoporosis_b4 == 0 & qf_age_problem == 0 & qf_sex_problem == 0 & qf_bmi_problem == 0 & alcohol_current_unknown == 1
 display "  Alcohol consumption level unknown: " r(N)
 
-quietly count if rx_osteoporosis_b4 == 0 & qf_age_problem == 0 & qf_sex_problem == 0 & qf_bmi_problem == 0 & alcohol_current_unknown == 0 & smoking_no_record == 1
+quietly count if rx_osteoporosis_b4 == 0 & qf_age_problem == 0 & qf_sex_problem == 0 & qf_bmi_problem == 0 & alcohol_no_record == 0 & alcohol_current_unknown == 0 & smoking_no_record == 1
 display "  No smoking record: " r(N)
-quietly count if rx_osteoporosis_b4 == 0 & qf_age_problem == 0 & qf_sex_problem == 0 & qf_bmi_problem == 0 & alcohol_current_unknown == 0 & smoking_current_unknown == 1
+quietly count if rx_osteoporosis_b4 == 0 & qf_age_problem == 0 & qf_sex_problem == 0 & qf_bmi_problem == 0 & alcohol_no_record == 0 & alcohol_current_unknown == 0 & smoking_current_unknown == 1
 display "  Smoking level unknown: " r(N)
 
 *Identify patients with at least one listed reason *

@@ -319,18 +319,6 @@ forvalues value = 1/5 {
     local order = `order' + 1
 }
 
-/* Sex: male first, followed by female */
-foreach value in 2 1 {
-    table1_category table_sex, ///
-        value(`value') ///
-        handle(`table1_post') ///
-        order(`order') ///
-        ndxa(`N_dxa') ///
-        nwomen(`N_women') ///
-        nmen(`N_men')
-    local order = `order' + 1
-}
-
 /* BMI: mean (SD) */
 table1_continuous qf_bmi, handle(`table1_post') order(`order')
 local order = `order' + 1
