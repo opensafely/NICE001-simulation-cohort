@@ -24,7 +24,7 @@ local boolean_variables ///
     rx_osteoporosis_b4 b_carehome carehome_nursing carehome_no_nursing ///
     b_anycancer b_asthmacopd b_cvd b_dementia b_endocrine ///
     dx_epilepsy b_falls b_liver b_malabsorption b_parkinsons ///
-    b_ra_sle b_renal b_type1 b_type2 fh_osteoporosis ///
+    b_ra b_sle b_renal b_type1 b_type2 fh_parental_hip_fracture fh_parental_osteoporosis ///
 	dx_hip_fracture dx_hip_fracture_hos ///
 	dx_vertebral_fracture dx_vertebral_fracture_hos ///
 	dx_wrist_fracture dx_wrist_fracture_hos ///
@@ -35,10 +35,11 @@ foreach variable of local boolean_variables {
     generate byte `parsed_boolean' = .
     replace `parsed_boolean' = 1 if inlist(upper(strtrim(`variable')), "T", "TRUE", "1")
     replace `parsed_boolean' = 0 if inlist(upper(strtrim(`variable')), "F", "FALSE", "0")
-    assert !missing(`parsed_boolean') if strtrim(`variable') != ""
+    replace `parsed_boolean' = 0 if strtrim(`variable') == ""    
+    assert !missing(`parsed_boolean') 
     drop `variable'
     rename `parsed_boolean' `variable'
-    assert inlist(`variable', 0, 1) | missing(`variable')
+    assert inlist(`variable', 0, 1)
 }
 *
 
@@ -145,6 +146,14 @@ replace qf_ethrisk = 1 if missing(qf_ethrisk)
 
 *carehome
 replace b_carehome = 1 if carehome_nursing == 1 | carehome_no_nursing == 1
+
+*Parental history of osteoporosis or hip fracture in a first degree relative
+gen fh_osteoporosis = fh_parental_hip_fracture 
+replace fh_osteoporosis = 1 if fh_parental_osteoporosis == 1
+
+*rheumatoid arthritis or systemic lupus erythematosus
+gen b_ra_sle = b_ra
+replace b_ra_sle = 1 if b_sle == 1
 
 *Calculate QFracture 2016 10-year MOF risk 
 do "analysis/calculate_qfracture_mof.do"

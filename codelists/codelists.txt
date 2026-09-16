@@ -20,6 +20,7 @@ nhsd-primary-care-domain-refsets/dmtype1_cod/20260630
 nhsd-primary-care-domain-refsets/dmtype2_cod/20260630
 nhs-drug-refsets/antidepdrug_cod/20260630
 nhs-drug-refsets/epildrug_cod/20260630
+opensafely/parental-history-of-hip-fracture/6307cf9e
 opensafely/malabsorption-due-to-other-causes/7e45b98c
 opensafely/hyperparathyroidism/1f0ec75b
 opensafely/alendronic-acid/114e9d3b

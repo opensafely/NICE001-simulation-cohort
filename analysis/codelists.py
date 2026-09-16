@@ -68,7 +68,8 @@ renal_disease_codes = _snomed("nhsd-primary-care-domain-refsets-ckdatrisk1_cod.c
 type1_diabetes_codes = _snomed("nhsd-primary-care-domain-refsets-dmtype1_cod.csv")
 type2_diabetes_codes = _snomed("nhsd-primary-care-domain-refsets-dmtype2_cod.csv")
 
-family_history_osteoporosis_codes = codelist_from_csv("codelists/uploaded/user-xixiong-parental-history-of-osteoporosis-or-hip-fracture.csv", column="code") 
+parental_hip_fracture_codes = codelist_from_csv("codelists/opensafely-parental-history-of-hip-fracture.csv", column="code")
+parental_osteoporosis_codes = codelist_from_csv("codelists/uploaded/user-xixiong-parental-history-of-osteoporosis.csv", column="code")
 
 # Fracture sites ---------------------------------------------------------------
 hip_fracture_snomed = codelist_from_csv("codelists/uploaded/user-xixiong-hip-fracture.csv", column="code") 
@@ -83,8 +84,8 @@ proximal_humerus_fracture_icd10 = codelist_from_csv("codelists/uploaded/user-xix
 osteoporotic_fracture_icd10 = codelist_from_csv("codelists/uploaded/user-xixiong-osteoporotic-fracture-icd10.csv", column="code") 
 
 # Composites ------------------------------------------------------------------
-asthma_or_copd_codes = asthma_codes + copd_codes
-cvd_codes = mi_codes + angina_codes + stroke_codes + tia_codes
+family_history_osteoporosis_codes = (parental_hip_fracture_codes + parental_osteoporosis_codes)
+asthma_or_copd_codes = (asthma_codes + copd_codes)
+cvd_codes = (mi_codes + angina_codes + stroke_codes + tia_codes)
 endocrine_codes = (hyperparathyroidism_codes + thyrotoxicosis_codes + cushing_syndrome_codes)
 malabsorption_codes = (crohns_codes + ulcerative_colitis_codes + coeliac_codes + other_malabsorption_codes)
-ra_or_sle_codes = rheumatoid_arthritis_codes + sle_codes

@@ -104,11 +104,13 @@ def build_qfracture_variables(index_date):
         "b_liver": ever_recorded(codelists.chronic_liver_disease_codes, index_date),
         "b_malabsorption": ever_recorded(codelists.malabsorption_codes, index_date),
         "b_parkinsons": ever_recorded(codelists.parkinsons_codes, index_date),
-        "b_ra_sle": ever_recorded(codelists.ra_or_sle_codes, index_date),
+        "b_ra": ever_recorded(codelists.rheumatoid_arthritis_codes, index_date),
+        "b_sle": ever_recorded(codelists.sle_codes, index_date),
         "b_renal": ever_recorded(codelists.renal_disease_codes, index_date),
         "b_type1": ever_recorded(codelists.type1_diabetes_codes, index_date),
         "b_type2": ever_recorded(codelists.type2_diabetes_codes, index_date),
-        "fh_osteoporosis": ever_recorded(codelists.family_history_osteoporosis_codes, index_date),
+        "fh_parental_hip_fracture": ever_recorded(codelists.parental_hip_fracture_codes, index_date),
+        "fh_parental_osteoporosis": ever_recorded(codelists.parental_osteoporosis_codes, index_date),
     }
 
     variables.update(_fracture_site_variables(

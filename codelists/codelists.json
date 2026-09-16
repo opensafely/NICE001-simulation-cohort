@@ -132,6 +132,12 @@
       "downloaded_at": "2026-09-08 14:41:44.768196+00:00Z",
       "sha": "22d7e5b703bd9555e7666753191b19cf3b505635"
     },
+    "opensafely-parental-history-of-hip-fracture.csv": {
+      "id": "opensafely/parental-history-of-hip-fracture/6307cf9e",
+      "url": "https://www.opencodelists.org/codelist/opensafely/parental-history-of-hip-fracture/6307cf9e/",
+      "downloaded_at": "2026-09-16 11:09:48.748426+00:00Z",
+      "sha": "73dcdb14e318308e47c820ab17b896064fa892e0"
+    },
     "opensafely-malabsorption-due-to-other-causes.csv": {
       "id": "opensafely/malabsorption-due-to-other-causes/7e45b98c",
       "url": "https://www.opencodelists.org/codelist/opensafely/malabsorption-due-to-other-causes/7e45b98c/",
