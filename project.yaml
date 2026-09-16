@@ -24,3 +24,14 @@ actions:
     outputs:
       moderately_sensitive:
         table1_qfracture: output/table1_dxa.csv  
+
+  calibrate_women:
+    run: stata-mp:v1 analysis/women_calibration_weighting.do
+    needs: [identify_dxa_eligible]
+    outputs:
+      highly_sensitive:
+        patient_weights: output/dxa_eligible_women_calibration_weights.dta
+      moderately_sensitive:
+        balance: output/women_calibration_balance.csv
+        weight_diagnostics: output/women_calibration_weight_diagnostics.csv        
+        missingness_exact: output/women_calibration_missingness.csv
