@@ -1,7 +1,7 @@
 """Reusable ehrQL helpers for patient-level QFracture measurements."""
 
-from ehrql import case, days, when, minimum_of
-from ehrql.tables.tpp import apcs, clinical_events, medications
+from ehrql import case, days, when, minimum_of, years
+from ehrql.tables.tpp import apcs, clinical_events, medications, patients
 
 
 def clinical_events_before(codelist, index_date):
@@ -13,6 +13,12 @@ def latest_clinical_event(codelist, index_date):
     return events.sort_by(clinical_events.date).last_for_patient()
 
 
+def latest_clinical_event_on_or_before(codelist, cutoff_date):
+    events = clinical_events.where(clinical_events.snomedct_code.is_in(codelist)
+    ).where(clinical_events.date.is_on_or_before(cutoff_date))
+    return events.sort_by(clinical_events.date).last_for_patient()
+
+
 def latest_numeric_clinical_event(codelist, index_date):
     events = clinical_events_before(codelist, index_date).where(clinical_events.numeric_value.is_not_null())
     return events.sort_by(clinical_events.date).last_for_patient()
@@ -20,6 +26,12 @@ def latest_numeric_clinical_event(codelist, index_date):
 
 def ever_recorded(codelist, index_date):
     return clinical_events_before(codelist, index_date).exists_for_patient()
+
+
+def ever_recorded_before_age(codelist, age, index_date):
+    age_cutoff = patients.date_of_birth + years(age)
+    return (clinical_events_before(codelist, index_date)
+        .where(clinical_events.date < age_cutoff).exists_for_patient())
 
 
 def fracture_episode_count_capped_at_two(
@@ -81,6 +93,5 @@ def hospital_admissions_before(icd10_codelist, index_date):
 
 
 def hospital_diagnosis_history(icd10_codelist, index_date):
-    return hospital_admissions_before(
-        icd10_codelist, index_date
+    return hospital_admissions_before(icd10_codelist, index_date
     ).exists_for_patient()

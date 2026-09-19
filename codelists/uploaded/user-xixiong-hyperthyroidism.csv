@@ -1,0 +1,76 @@
+code,term
+1163454006,Thyrotoxicosis due to hyperfunctioning follicular adenoma of thyroid gland
+154655004,Thyrotoxicosis: [+/- goitre] or [toxic goitre] or [Graves disease] or [thyroid nodule]
+154657007,Toxic uninodular goitre
+154658002,Toxic multinodular goitre
+154659005,Thyrotoxicosis NOS
+15470004,Toxic diffuse goiter with acropachy
+190239004,([Thyrotoxicosis] or [hyperthyroidism]) or (toxic goitre)
+190241003,Toxic diffuse goiter with no crisis
+190242005,Toxic diffuse goiter with crisis
+190244006,Toxic uninodular goiter with no crisis
+190245007,Toxic uninodular goiter with crisis
+190246008,Toxic uninodular goiter NOS
+190247004,Toxic multinodular goiter with no crisis
+190248009,Toxic multinodular goiter with crisis
+190249001,Toxic multinodular goiter NOS
+190255006,Thyrotoxicosis due to ectopic thyroid nodule with no crisis
+190256007,Thyrotoxicosis due to ectopic thyroid nodule with crisis
+190257003,Thyrotoxicosis from ectopic thyroid nodule NOS
+190259000,Thyrotoxicosis of other specified origin with no crisis
+190260005,Thyrotoxicosis of other specified origin with crisis
+190263007,Thyrotoxicosis of other specified origin NOS
+190264001,Thyrotoxicosis without mention of goiter or other cause
+190265000,Thyrotoxicosis without mention of goiter or other cause with no crisis
+190266004,Thyrotoxicosis without mention of goiter or other cause with crisis
+190267008,Thyrotoxicosis NOS
+191040002,[X]Other thyrotoxicosis
+22350004,T>3< thyrotoxicosis
+237498007,Toxic goiter
+237499004,Thyrotoxicosis due to Graves' disease
+237505003,Apathetic thyrotoxicosis
+237511000,Thyrotoxicosis due to inappropriate TSH secretion
+237512007,Thyrotoxicosis due to thyrotropin-secreting pituitary adenoma
+237824009,Juvenile Graves' disease
+25008002,Hyperthyroidism due to struma ovarii
+26151008,Graves' disease with acropachy AND with thyrotoxic crisis
+26389007,Toxic multinodular goiter
+267373004,Thyrotoxicosis
+267374005,Toxic diffuse goiter
+267375006,Thyrotoxicosis of other specified origin
+267464006,Thyrotoxicosis: [+/- goitre] or [toxic goitre] or [Graves disease] or [thyroid nodule]
+286909009,Thyrotoxicosis with or without goiter
+29028009,Thyrotoxic crisis
+30985009,Toxic nodular goiter with thyrotoxic storm
+34486009,Hyperthyroidism
+353295004,Graves' disease
+360353005,Thyrotoxicosis due to pituitary thyroid hormone resistance
+360358001,Thyrotoxicosis due to overproduction of thyroid stimulating hormone
+360361000,Thyrotoxicosis due to inappropriate thyroid stimulating hormone secretion
+367367004,Basedow's disease
+450081000000105,[X]Other thyrotoxicosis
+479003,Graves' disease with pretibial myxedema AND with thyrotoxic crisis
+57777000,Toxic nodular goiter
+60216004,Toxic diffuse goiter with thyrotoxic crisis
+60268006,Toxic diffuse goiter with pretibial myxedema
+603661000000107,Toxic uninodular goiter NOS
+603671000000100,Toxic multinodular goiter NOS
+62278002,Toxic multinodular goiter with thyrotoxic crisis
+630791000000109,Thyrotoxicosis from ectopic thyroid nodule NOS
+653161000000106,Thyrotoxicosis of other specified origin with no crisis
+653171000000104,Thyrotoxicosis without mention of goiter or other cause
+653181000000102,Thyrotoxicosis without mention of goiter or other cause with no crisis
+653191000000100,Thyrotoxicosis without mention of goiter or other cause with crisis
+653201000000103,Thyrotoxicosis NOS
+662051000000105,Thyrotoxicosis of other specified origin with crisis
+662061000000108,Thyrotoxicosis of other specified origin NOS
+66628005,Toxic diffuse goiter with exophthalmos AND with thyrotoxic storm
+681031000000106,Thyrotoxicosis of other specified origin
+69329005,Toxic uninodular goiter with thyrotoxic crisis
+716743006,Familial hyperthyroidism due to mutation in thyroid stimulating hormone receptor
+722941003,Secondary hyperthyroidism
+722942005,Familial hyperthyroidism
+73869005,Toxic uninodular goiter
+87232008,Hyperthyroidism due to ectopic thyroid nodule
+89719007,Thyrotoxicosis without goiter or other cause
+90739004,Thyrotoxicosis

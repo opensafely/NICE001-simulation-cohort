@@ -18,6 +18,7 @@ nhsd-primary-care-domain-refsets/slupus_cod/20260630
 nhsd-primary-care-domain-refsets/ckdatrisk1_cod/20260630
 nhsd-primary-care-domain-refsets/dmtype1_cod/20260630
 nhsd-primary-care-domain-refsets/dmtype2_cod/20260630
+nhsd-primary-care-domain-refsets/dialysis_cod/20260630
 nhs-drug-refsets/antidepdrug_cod/20260630
 nhs-drug-refsets/epildrug_cod/20260630
 opensafely/parental-history-of-hip-fracture/6307cf9e

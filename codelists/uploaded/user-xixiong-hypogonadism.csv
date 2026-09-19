@@ -1,0 +1,170 @@
+code,term
+1003380001,6q16 microdeletion syndrome
+1003583000,Agenesis of bilateral testes
+10340008,Isolated gonadotropin deficiency
+10654009,Postsurgical ovarian failure
+111550004,Ovarian failure
+111551000,Testicular hypofunction
+1156768008,Ovarioleukodystrophy
+1208933000,4H leukodystrophy
+1229943004,SIM bHLH transcription factor 1-related Prader-Willi-like syndrome
+1229946007,MAGE family member L2-related Prader-Willi-like syndrome
+1237345002,"46,XX ovarian dysgenesis, short stature syndrome"
+123953004,Idiopathic hypogonadotropic hypogonadism
+1260449002,Polyendocrine polyneuropathy syndrome
+129633006,Induced female hypogonadism syndrome
+129634000,Induced male hypogonadism syndrome
+1332509007,Fragile X associated primary ovarian insufficiency
+1335741009,Testicular hypofunction due to and following radiotherapy
+1338060006,Testicular hypofunction caused by ionizing radiation
+1340175001,Carboxypeptidase E-related Prader-Willi-like syndrome
+1345272009,Ovarian failure following procedure
+1381305001,Normogonadotropic hypogonadism
+154713003,Gonad failure: [other] or [testicular feminisation] or [hypogonadism - male] or [premature menopause]
+16041008,Female hypogonadism syndrome
+190538008,Postablative ovarian failure
+190539000,Post-surgical ovarian failure
+190540003,Other iatrogenic postablative ovarian failure
+190541004,Other specified postablative ovarian failure
+190542006,Postablative ovarian failure NOS
+190543001,(Other ovarian failure) or (ovarian hypogonadism)
+190544007,Secondary ovarian failure &/or premature menopause NOS
+190545008,Hypergonadotrophic ovarian failure
+190546009,Female hypogonadism
+190547000,Other specified other ovarian failure
+190548005,Other ovarian failure NOS
+190552005,Postablative testicular hypofunction
+190553000,Post-surgical testicular hypofunction
+190554006,Other iatrogenic postablative testicular hypofunction
+190555007,Other specified postablative testicular hypofunction
+190556008,Postablative testicular hypofunction NOS
+190557004,(Hypogonadism: [eunuchoidism] or [testicular]) or (other testicular hypofunction)
+190558009,Testicular hypofunction due to defect in adrenocortical hormone synthesis (& 17B hydroxysteroid dehydrogenase)
+190559001,(Eunuchism) or (Kallman's syndrome)
+190560006,Other specified other testicular hypofunction
+190561005,Other testicular hypofunction NOS
+2041006,Eunuchoid gigantism
+205683001,Ovarian dysgenesis
+20615009,Postirradiation testicular hypofunction
+217228191000119105,Female infertility due to ovarian failure
+230229007,Early onset cerebellar ataxia with hypogonadism
+230240004,Progressive cerebellar ataxia with hypogonadism
+236796004,Hypogonadism with prune belly syndrome
+236811002,Acquired testicular failure
+236813004,Post-chemotherapy testicular hypofunction
+237137009,Incipient ovarian failure
+237138004,Menopause ovarian failure
+237616002,"Hypogonadism, diabetes mellitus, alopecia, mental retardation and electrocardiographic abnormalities"
+237787007,Post-chemotherapy ovarian failure
+237788002,Premature ovarian insufficiency
+237790001,Autoimmune primary ovarian failure
+239060009,Atypical ichthyosis vulgaris with hypogonadism
+267399006,Other ovarian failure
+267400004,Secondary ovarian failure
+267401000,Other testicular hypofunction
+267402007,Testicular hypofunction due to defect in adrenocortical hormone synthesis
+267486007,Gonad failure: [other] or [testicular feminisation] or [hypogonadism - male] or [premature menopause]
+286918006,Gonad postablative failure
+30187002,Testicular hypogonadism
+33927004,Hypogonadotropic hypogonadism
+361117008,Female hypogonadotropic hypogonadism
+367333009,Primary testicular failure
+368341000119109,Symptomatic postprocedural ovarian failure
+370997001,Primary testicular failure
+370999003,Primary hypogonadism
+371015003,Congenital absence of both testes
+38825009,Deficiency of testosterone biosynthesis
+39381003,Female hypergonadotropic hypogonadism
+420499009,Hypogonadotropic hypogonadism due to isolated gonadotropin deficiency
+421019006,Hypogonadotropic hypogonadism due to follicle-stimulating hormone deficiency
+421821002,Hypogonadotropic hypogonadism due to luteinizing hormone deficiency
+42245002,Iatrogenic ovarian failure
+45055003,Ovarian failure following radiotherapy
+48130008,Hypogonadism
+48723006,Male hypogonadism
+5036006,Hypogonadal obesity
+510111000000104,Hypogonadotropic hypogonadism
+53582006,"Other testicular hypofunction, NEC"
+54238005,Primary hypogonadism
+55329001,"Other ovarian failure, NEC"
+593741000000106,Other iatrogenic postablative ovarian failure
+593751000000109,Other specified postablative ovarian failure
+60237007,Postsurgical testicular hypofunction
+615681000000100,Other iatrogenic postablative testicular hypofunction
+615691000000103,Other specified postablative testicular hypofunction
+615701000000103,Postablative testicular hypofunction NOS
+622891000000100,Other specified other testicular hypofunction
+622901000000104,Other testicular hypofunction NOS
+62999006,Adiposogenital dystrophy
+636071000000109,Other ovarian failure NOS
+652611000000106,Postablative ovarian failure NOS
+652621000000100,Other specified other ovarian failure
+65846009,Primary ovarian failure
+66957007,Iatrogenic testicular hypofunction
+67718002,Secondary hypogonadism
+679641000000104,Other ovarian failure
+679651000000101,Other testicular hypofunction
+700150001,Congenital leptin deficiency
+715429006,Congenital muscular dystrophy with infantile cataract and hypogonadism syndrome
+715984007,Cerebellar ataxia with hypogonadism and choroidal dystrophy syndrome
+717910009,Iatrogenic premature ovarian insufficiency
+717954003,Acquired premature ovarian failure
+718714006,Deafness and hypogonadism syndrome
+718914002,X-linked intellectual disability Van Esch type
+719013004,X-linked intellectual disability Cilliers type
+719160009,Syndromic X-linked intellectual disability type 7
+719275009,Primary hypergonadotropic hypogonadism and partial alopecia syndrome
+719451006,Dilated cardiomyopathy with hypergonadotropic hypogonadism syndrome
+720511000,Arrhinia with choanal atresia and microphthalmia syndrome
+720574003,"Brachytelephalangy, facial dysmorphism, Kallmann syndrome"
+720981000,Alopecia and intellectual disability with hypergonadotropic hypogonadism syndrome
+721176002,Idiopathic premature ovarian insufficiency
+721198006,Premature ovarian insufficiency due to autoimmune inflammation of ovary
+721231007,Hydrocephalus with obesity and hypogonadism syndrome
+721233005,Hypergonadotropic hypogonadism with cataract syndrome
+721289001,Testicular hypofunction following procedure
+721584005,Johnson neuroectodermal syndrome
+721841001,Hypogonadism with mitral valve prolapse and intellectual disability syndrome
+721842008,Hypogonadotropic hypogonadism with frontoparietal alopecia syndrome
+721846006,"Hypomyelination, hypogonadotropic hypogonadism, hypodontia syndrome"
+721977007,"Lung fibrosis, immunodeficiency, 46,XX gonadal dysgenesis syndrome"
+722002002,"Intellectual disability, balding, patella luxation, acromicria syndrome"
+722027009,Kallman syndrome with heart disease
+722037004,"Intellectual disability, epileptic seizures, hypogonadism and hypogenitalism, microcephaly, obesity syndrome"
+722064003,Odontoleukodystrophy
+722114007,"Sclerosing dysplasia of bone, ichthyosis, premature ovarian failure syndrome"
+722378009,Congenital cataract with deafness and hypogonadism syndrome
+722380003,Congenital cataract with intellectual disability and hypogonadotropic hypogonadism syndrome
+722454003,"Intellectual disability, craniofacial dysmorphism, hypogonadism, diabetes mellitus syndrome"
+722459008,"Male hypergonadotropic hypogonadism, intellectual disability, skeletal anomaly syndrome"
+722944006,Congenital hypogonadotropic hypogonadism
+724001005,"Retinitis pigmentosa, intellectual disability, deafness, hypogenitalism syndrome"
+724097003,"Moyamoya angiopathy, short stature, facial dysmorphism, hypergonadotropic hypogonadism syndrome"
+724174003,"Moebius syndrome, axonal neuropathy, hypogonadotropic hypogonadism syndrome"
+724281002,"Hyposmia, nasal and ocular hypoplasia, hypogonadotropic hypogonadism syndrome"
+724461000,Ovarian failure due to procedure
+733092009,"Microcephalus, hypergonadotropic hypogonadism, short stature syndrome"
+733113002,Hypogonadotropic hypogonadism retinitis pigmentosa syndrome
+74501005,Female hypogonadotropic hypogonadism
+7570002,Congenital absence of testis
+758664007,Isolated follicle stimulating hormone deficiency
+764095005,"Leukoencephalopathy, ataxia, hypodontia, hypomyelination syndrome"
+764959000,"Intellectual disability, myopathy, short stature, endocrine defect syndrome"
+765471005,"X-linked intellectual disability, hypogonadism, ichthyosis, obesity, short stature syndrome"
+770679002,"Polyneuropathy, intellectual disability, acromicria, premature menopause syndrome"
+770680004,Prader-Willi-like syndrome
+770941005,"Alopecia, progressive neurological defect, endocrinopathy syndrome"
+773665006,"Hypogonadotropic hypogonadism, severe microcephaly, sensorineural hearing loss, dysmorphism syndrome"
+782917007,Familial adrenal hypoplasia with absent pituitary luteinizing hormone
+785722006,Obesity due to leptin receptor gene deficiency
+808431000000103,Early onset cerebellar ataxia with hypogonadism
+80956002,Resistant ovary syndrome
+816067005,"Diabetes, hypogonadism, deafness, intellectual disability syndrome"
+82560004,Leydig cell failure in adult
+827931000000102,Late onset male hypogonadism
+846680003,Functional hypogonadotropic hypogonadism
+8829008,Isolated lutropin deficiency
+88918002,Eunuchoidism
+89392001,Prader-Willi syndrome
+93559003,Hypogonadism with anosmia
+95198001,"Pure gonadal dysgenesis 46,XX"

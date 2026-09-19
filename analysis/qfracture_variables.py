@@ -4,15 +4,18 @@ This module deliberately extracts raw codes, values, component diagnoses and
 prescription counts. 
 """
 
+from datetime import date
 from ehrql import months
 from ehrql.tables.tpp import addresses, ethnicity_from_sus, patients
 
 import codelists
 from variables_helpers import (
     ever_recorded,
+    ever_recorded_before_age,
     fracture_episode_count_capped_at_two,
     hospital_diagnosis_history,
     latest_clinical_event,
+    latest_clinical_event_on_or_before,    
     latest_numeric_clinical_event,
     medication_count,
 )
@@ -20,7 +23,8 @@ from variables_helpers import (
 
 RECENT_MEDICATION_LOOKBACK_MONTHS = 6
 FRACTURE_EPISODE_WINDOW_DAYS = 180
-
+SECONDARY_OSTEOPOROSIS_BASELINE_DATE = date(2024, 1, 1)
+SECONDARY_OSTEOPOROSIS_MEDICATION_END_DATE = date(2025, 1, 1)
 
 def _fracture_site_variables(name, snomed_codes, icd10_codes, index_date):
     return {
@@ -58,6 +62,23 @@ def build_qfracture_variables(index_date):
     hrt_oestrogen_count = medication_count(codelists.hrt_oestrogen_dmd, recent_medication_start, index_date,)
     corticosteroid_count = medication_count(codelists.systemic_corticosteroid_dmd, recent_medication_start, index_date,)
 
+    # FRAX secondary-osteoporosis components. For long-standing untreated hyperthyroidism, require evidence by 1 January 2024, no antithyroid
+    # prescription during 2024, and no resolved/remission code after the most recent active hyperthyroidism diagnosis recorded before index.
+    hyperthyroidism_by_baseline = latest_clinical_event_on_or_before(codelists.hyperthyroidism_codes,SECONDARY_OSTEOPOROSIS_BASELINE_DATE,)
+    latest_active_hyperthyroidism = latest_clinical_event(codelists.hyperthyroidism_codes, index_date,)
+    latest_hyperthyroidism_resolution = latest_clinical_event(codelists.hyperthyroidism_resolved_codes, index_date,)
+    antithyroid_count_2024 = medication_count(codelists.antithyroid_dmd,SECONDARY_OSTEOPOROSIS_BASELINE_DATE,SECONDARY_OSTEOPOROSIS_MEDICATION_END_DATE,)
+
+    untreated_longstanding_hyperthyroidism = (hyperthyroidism_by_baseline.date.is_not_null() & 
+                (antithyroid_count_2024 == 0) & 
+                (latest_hyperthyroidism_resolution.date.is_null() | (latest_hyperthyroidism_resolution.date <= latest_active_hyperthyroidism.date)))
+
+    secondary_oi = ever_recorded(codelists.osteogenesis_imperfecta_codes, index_date,)
+    secondary_hypogonadism = ever_recorded(codelists.hypogonadism_codes, index_date,)
+    secondary_premature_menopause = ever_recorded_before_age(codelists.premature_menopause_codes, 45, index_date,)
+    secondary_malnutrition = ever_recorded(codelists.chronic_malnutrition_codes, index_date,)
+    dialysis_history = ever_recorded(codelists.dialysis_codes, index_date)
+
     variables = {
         # Demography and continuous measurements
         "sex": patients.sex,
@@ -87,6 +108,7 @@ def build_qfracture_variables(index_date):
         "rx_anticonvulsant_n_6m": anticonvulsant_count,
         "rx_hrt_n_6m": hrt_oestrogen_count,
         "rx_corticosteroid_n_6m": corticosteroid_count,
+        "rx_antithyroid_n_2024": antithyroid_count_2024, 
 
         # Care-home components at index
         "b_carehome": address_at_index.care_home_is_potential_match.when_null_then(False),
@@ -111,6 +133,17 @@ def build_qfracture_variables(index_date):
         "b_type2": ever_recorded(codelists.type2_diabetes_codes, index_date),
         "fh_parental_hip_fracture": ever_recorded(codelists.parental_hip_fracture_codes, index_date),
         "fh_parental_osteoporosis": ever_recorded(codelists.parental_osteoporosis_codes, index_date),
+
+        # FRAX secondary-osteoporosis components and diagnostic fields.
+        "so_osteogenesis_imperfecta": secondary_oi,
+        "so_hypogonadism": secondary_hypogonadism,
+        "so_premature_menopause_u45": secondary_premature_menopause,
+        "so_chronic_malnutrition": secondary_malnutrition,
+        "so_dialysis_history": dialysis_history,
+        "so_untreated_hyperthyroidism": (untreated_longstanding_hyperthyroidism),
+        "so_hyperthyroid_baseline_date": hyperthyroidism_by_baseline.date,
+        "so_hyperthyroid_active_date": latest_active_hyperthyroidism.date,
+        "so_hyperthyroid_remission_date": (latest_hyperthyroidism_resolution.date),
     }
 
     variables.update(_fracture_site_variables(

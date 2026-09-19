@@ -33,6 +33,7 @@ antidepressant_dmd = _dmd("nhs-drug-refsets-antidepdrug_cod.csv")
 anticonvulsant_dmd = _dmd("nhs-drug-refsets-epildrug_cod.csv")
 systemic_corticosteroid_dmd = codelist_from_csv("codelists/uploaded/user-xixiong-oral-systemic-corticosteroids.csv", column="code") 
 hrt_oestrogen_dmd = codelist_from_csv("codelists/uploaded/user-xixiong-oestrogen-only-hrt.csv", column="code") 
+antithyroid_dmd = codelist_from_csv("codelists/uploaded/user-xixiong-antithyroid-drugs.csv", column="code")
 
 # Diagnoses -------------------------------------------------------------------
 any_cancer_codes = _snomed("user-ciaranmci-cancer-snomed-ct.csv")
@@ -70,6 +71,15 @@ type2_diabetes_codes = _snomed("nhsd-primary-care-domain-refsets-dmtype2_cod.csv
 
 parental_hip_fracture_codes = codelist_from_csv("codelists/opensafely-parental-history-of-hip-fracture.csv", column="code")
 parental_osteoporosis_codes = codelist_from_csv("codelists/uploaded/user-xixiong-parental-history-of-osteoporosis.csv", column="code")
+
+# FRAX secondary-osteoporosis components --------------------------------------
+osteogenesis_imperfecta_codes = codelist_from_csv("codelists/uploaded/user-xixiong-osteogenesis-imperfecta.csv", column="code")
+hyperthyroidism_codes = codelist_from_csv("codelists/uploaded/user-xixiong-hyperthyroidism.csv", column="code")
+hyperthyroidism_resolved_codes = codelist_from_csv("codelists/uploaded/user-xixiong-hyperthyroidism-resolved-or-in-remission.csv", column="code")
+hypogonadism_codes = codelist_from_csv("codelists/uploaded/user-xixiong-hypogonadism.csv", column="code")
+premature_menopause_codes = codelist_from_csv("codelists/uploaded/user-xixiong-premature-menopause.csv", column="code")
+chronic_malnutrition_codes = codelist_from_csv("codelists/uploaded/user-xixiong-chronic-malnutrition.csv", column="code")
+dialysis_codes = _snomed("nhsd-primary-care-domain-refsets-dialysis_cod.csv")
 
 # Fracture sites ---------------------------------------------------------------
 hip_fracture_snomed = codelist_from_csv("codelists/uploaded/user-xixiong-hip-fracture.csv", column="code") 

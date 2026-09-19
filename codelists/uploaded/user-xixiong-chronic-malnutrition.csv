@@ -1,0 +1,52 @@
+code,term
+102636009,Chronic nutritional deficiency
+13365009,Malnutrition following gastrointestinal surgery
+1875311000000100,Global Leadership Initiative on Malnutrition stage 1 moderate malnutrition
+1875321000000106,Global Leadership Initiative on Malnutrition stage 2 severe malnutrition
+190596005,Marasmic kwashiorkor
+190597001,Protein malnutrition unspecified
+190598006,[X]Unspecified severe protein-energy malnutrition
+190599003,Nutritional marasmus
+190600000,Other severe protein-calorie malnutrition (weight for age less than 60% of standard)
+190601001,Other and unspecified protein-calorie malnutrition (weight for age 60-89% of standard)
+190602008,Moderate protein-calorie malnutrition (weight for age 60-74 percent of standard)
+190603003,Mild protein-calorie malnutrition (weight for age 75-89 percent of standard)
+190605005,Mild protein energy malnutrition
+190606006,Moderate protein energy malnutrition
+190607002,Other protein-calorie malnutrition
+190608007,Malnutrition: [NOS] or [protein-calorie NOS] or [& dystrophy]
+191078000,[X]Unspecified severe protein-energy malnutrition
+197484002,Post-gastrointestinal tract surgery malnutrition
+238105005,Dystrophy due to malnutrition
+238106006,Malnutrition NOS
+238107002,Deficiency of macronutrients
+238109004,Marasmic kwashiorkor
+248325000,Undernourished
+267411007,Protein-calorie malnutrition NOS
+272588001,Malnutrition (calorie)
+273491005,Protein deficiency disease
+281583001,Nutritional wasting
+29740003,Nutritional marasmus
+302868002,Undernutrition
+30773007,Severe protein-calorie malnutrition (Gomez: less than 60% of standard weight)
+360549009,Severe protein-calorie malnutrition (Gomez: less than 60 percent of standard weight)
+360554000,Alimentary edema
+419491000000100,[X]Unspecified severe protein-energy malnutrition
+441951000124102,Starvation-related malnutrition
+441971000124107,Chronic disease-related malnutrition
+444601000000102,[X]Unspecified severe protein-energy malnutrition
+58262005,Kwashiorkor
+603791000000108,Other and unspecified protein-calorie malnutrition (weight for age 60-89% of standard)
+623791000000100,Protein malnutrition unspecified
+644091000000103,Other protein-calorie malnutrition
+646561000000107,Other severe protein-calorie malnutrition (weight for age less than 60% of standard)
+652391000000108,Malnutrition NOS
+65404009,Undernutrition
+679301000000105,Protein-calorie malnutrition NOS
+72031000119107,Severe malnutrition due to type 1 diabetes mellitus
+72051000119101,Severe malnutrition due to type 2 diabetes mellitus
+72608005,Protein-energy malnutrition
+77091003,Malnutrition of moderate degree (Gomez: 60 percent to less than 75 percent of standard weight)
+77702009,Malnutrition of mild degree (Gomez: 75 percent to less than 90 percent of standard weight)
+79472001,"Protein-energy malnutrition, NEC"
+97361000119109,Hypoalbuminemia due to protein calorie malnutrition

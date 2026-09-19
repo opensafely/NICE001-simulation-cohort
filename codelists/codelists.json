@@ -120,6 +120,12 @@
       "downloaded_at": "2026-09-08 15:26:14.417203+00:00Z",
       "sha": "9ae4e751ad57000010c2aa0122b778a2d1b6c6ba"
     },
+    "nhsd-primary-care-domain-refsets-dialysis_cod.csv": {
+      "id": "nhsd-primary-care-domain-refsets/dialysis_cod/20260630",
+      "url": "https://www.opencodelists.org/codelist/nhsd-primary-care-domain-refsets/dialysis_cod/20260630/",
+      "downloaded_at": "2026-09-19 14:22:45.780758+00:00Z",
+      "sha": "d3ba4283cb58b4d004fb8a73338f5a9561fd28ac"
+    },
     "nhs-drug-refsets-antidepdrug_cod.csv": {
       "id": "nhs-drug-refsets/antidepdrug_cod/20260630",
       "url": "https://www.opencodelists.org/codelist/nhs-drug-refsets/antidepdrug_cod/20260630/",

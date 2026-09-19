@@ -1,7 +1,4 @@
-/*Identify the DXA-eligible population
-
-The patient-level input is the source population already selected in ehrQL:
-alive, aged 50-99, and continuously registered through the full baseline year. */
+/*Identify the DXA-eligible population*/
 
 version 16.1
 clear all
@@ -11,7 +8,7 @@ import delimited using "output/qfracture_variables.csv", clear varnames(1) strin
 local numeric_variables ///
     age bmi_raw alcohol_numeric smoking_numeric ///
     rx_antidepressant_n_6m rx_anticonvulsant_n_6m ///
-    rx_hrt_n_6m rx_corticosteroid_n_6m ///
+    rx_hrt_n_6m rx_corticosteroid_n_6m rx_antithyroid_n_2024 ///    
     dx_hip_fracture_n dx_vertebral_fracture_n ///
     dx_wrist_fracture_n dx_proximal_humerus_fracture_n
 
@@ -25,6 +22,10 @@ local boolean_variables ///
     b_anycancer b_asthmacopd b_cvd b_dementia b_endocrine ///
     dx_epilepsy b_falls b_liver b_malabsorption b_parkinsons ///
     b_ra b_sle b_renal b_type1 b_type2 fh_parental_hip_fracture fh_parental_osteoporosis ///
+	so_osteogenesis_imperfecta ///
+	so_hypogonadism so_premature_menopause_u45 ///
+	so_chronic_malnutrition so_dialysis_history ///
+	so_untreated_hyperthyroidism ///
 	dx_hip_fracture dx_hip_fracture_hos ///
 	dx_vertebral_fracture dx_vertebral_fracture_hos ///
 	dx_wrist_fracture dx_wrist_fracture_hos ///
@@ -60,6 +61,17 @@ generate byte b_antidepressant = rx_antidepressant_n_6m >= 2 if !missing(rx_anti
 generate byte b_corticosteroids = rx_corticosteroid_n_6m >= 2 if !missing(rx_corticosteroid_n_6m)
 generate byte b_hrt_oest = rx_hrt_n_6m >= 2 if !missing(rx_hrt_n_6m)
 generate byte b_epilepsy2 = (dx_epilepsy == 1 | rx_anticonvulsant_n_6m >= 2) if !missing(dx_epilepsy) & !missing(rx_anticonvulsant_n_6m)
+
+*FRAX secondary osteoporosis proxy and its component-level indicators.
+generate byte so_renal_nondialysis = b_renal == 1 & so_dialysis_history == 0
+
+generate byte secondary_osteoporosis = b_type1 == 1 | so_osteogenesis_imperfecta == 1 | ///
+    so_untreated_hyperthyroidism == 1 | ///
+    so_hypogonadism == 1 | so_premature_menopause_u45 == 1 | ///
+    so_chronic_malnutrition == 1 | b_malabsorption == 1 | ///
+    so_renal_nondialysis == 1 | b_liver == 1
+assert inlist(so_renal_nondialysis, 0, 1)
+assert inlist(secondary_osteoporosis, 0, 1)
 
 *BMI
 generate double qf_bmi = bmi_raw
