@@ -1,5 +1,5 @@
-/* Purpose: Estimate entropy-balancing weights that align women in the OpenSAFELY
-DXA-eligible cohort with women treatment-eligible cohort.*/
+/* Purpose: Estimate entropy-balancing weights that align men in the OpenSAFELY
+DXA-eligible cohort with men treatment-eligible cohort.*/
 
 version 16.1
 clear all
@@ -17,35 +17,35 @@ local verify_tolerance 0.00001
 
 use "output/dxa_eligible_population.dta", clear
 keep if dxa_eligible == 1
-keep if lower(strtrim(sex)) == "female"
+keep if lower(strtrim(sex)) == "male"
 quietly count
 local source_n = r(N)
 
-/* ---------------- aggregate targets ---------------------------------- */
-local target_total 16592
+/* ---------------- Male aggregate targets ----------------------------- */
+local target_total 7795
 
 * Age bands: 50-54, 55-59, 60-64, 65-69, 70-74, 75-79, 80-84, 85-89, 90+.
-matrix N_age       = (674, 1080, 1984, 2232, 2691, 2637, 2436, 1762, 1096)
-matrix C_lowbmi    = ( 14,   20,   31,   32,   39,   21,   29,   34,   32)
-matrix C_prevfx    = (622,  944, 1472, 1379, 1555, 1458, 1353,  974,  606)
-matrix C_smoke     = (197,  237,  376,  335,  352,  281,  199,  126,   63)
-matrix C_alcohol   = (105,  146,  248,  259,  287,  268,  233,  165,  103)
-matrix C_ra        = ( 70,  122,  167,  178,  193,  172,  159,  110,   60)
-matrix C_steroid   = (142,  203,  462,  466,  426,  423,  365,  250,  160)
-matrix C_secondary = (290,  345,  594,  646,  640,  546,  419,  271,  131)
+matrix N_age       = (983, 729, 1041, 1052, 1072, 1038, 981, 622, 277)
+matrix C_lowbmi    = (  4,   5,    4,    7,    9,    8,   5,   4,   3)
+matrix C_prevfx    = (971, 700,  940,  880,  800,  609, 443, 211,  73)
+matrix C_smoke     = (344, 253,  328,  322,  283,  215, 200, 102,  46)
+matrix C_alcohol   = (373, 273,  410,  407,  425,  365, 328, 209,  85)
+matrix C_ra        = ( 32,  23,   44,   63,   51,   55,  59,  47,  30)
+matrix C_steroid   = ( 65,  52,   82,   82,   87,   79,  61,  41,   8)
+matrix C_secondary = (200, 190,  333,  343,  395,  444, 497, 315, 143)
 
 matrix M_bmi = ( ///
-    26.95727002967358, 27.32500000000003, 27.34077620967744, ///
-    27.24439964157706, 27.62772203641772, 28.23147516116799, ///
-    27.94831691297208, 27.07474460839949, 26.37691605839416)
+	28.33825025432353, 28.15349794238686, 27.28424591738713, ///
+	26.83146387832700, 26.61016791044777, 26.70385356454722, ///
+	26.48358817533126, 26.35691318327976, 25.87256317689531)
 	
 matrix SD_bmi = ( ///
-    5.134356696583268, 5.330737368292470, 4.950353176611750, ///
-    4.847662751582217, 5.145261361133998, 5.269837424449750, ///
-    5.275743691528498, 4.965330463029384, 4.560051467333120)
+	5.299982879582247, 4.831162235352270, 4.312783060169213, ///
+	4.031426091677906, 4.023226122300709, 3.766794547452983, ///
+	3.437824681456744, 3.009535375707634, 3.401955682293866)
 
-scalar target_bmi_mean_all = 27.49658269045323
-scalar target_bmi_sd_all   =  5.102052591344626
+scalar target_bmi_mean_all = 27.04243745991023
+scalar target_bmi_sd_all   =  4.198788601895486
 
 * Convert target counts into within-age proportions.
 foreach characteristic in lowbmi prevfx smoke alcohol ra steroid secondary {
@@ -82,6 +82,7 @@ drop __previous_fracture_max
 generate byte cal_smoke = .
 replace cal_smoke = 1 if inrange(qf_smoke_cat, 2, 4) | smoking_current_unknown == 1
 replace cal_smoke = 0 if inlist(qf_smoke_cat, 0, 1)
+assert !missing(cal_smoke) if smoking_no_record == 0
 generate byte cal_alcohol = inrange(qf_alcohol_cat6, 3, 5) if !missing(qf_alcohol_cat6)
 generate byte cal_ra = b_ra if !missing(b_ra)
 generate byte cal_steroid = b_corticosteroids if !missing(b_corticosteroids)
@@ -151,8 +152,8 @@ postclose `missing_post'
 preserve
 use "`missing_results'", clear
 sort characteristic age_band
-save "output/women_calibration_missingness.dta", replace
-export delimited using "output/women_calibration_missingness.csv", replace
+save "output/men_calibration_missingness.dta", replace
+export delimited using "output/men_calibration_missingness.csv", replace
 restore
 
 /* ---------------- Feasibility and overlap checks --------------------- */
@@ -160,7 +161,7 @@ forvalues g = 1/9 {
     quietly count if cal_ageband == `g'
     if r(N) == 0 {
         local group_label : label cal_ageband_label `g'
-        display as error "No OpenSAFELY women in age band `group_label'."
+        display as error "No OpenSAFELY men in age band `group_label'."
         exit 459
     }
 }
@@ -349,7 +350,7 @@ foreach stage in age core full full_bmi {
 }
 
 generate double calibration_weight = cw_full_bmi
-label variable calibration_weight "Women calibration weight: age + shared risks + BMI targets"
+label variable calibration_weight "Men calibration weight: age + shared risks + BMI targets"
 
 * Sensitivity weight truncated at the final weight's 99th percentile.
 quietly summarize calibration_weight, detail
@@ -436,8 +437,8 @@ postclose `weight_post'
 
 preserve
 use "`weight_results'", clear
-save "output/women_calibration_weight_diagnostics.dta", replace
-export delimited using "output/women_calibration_weight_diagnostics.csv", replace
+save "output/men_calibration_weight_diagnostics.dta", replace
+export delimited using "output/men_calibration_weight_diagnostics.csv", replace
 restore
 
 /* ---------------- Missingness after weighting ------------------------ */
@@ -491,8 +492,8 @@ postclose `weighted_missing_post'
 preserve
 use "`weighted_missing_results'", clear
 sort characteristic age_band
-save "output/women_calibration_weighted_missingness.dta", replace
-export delimited using "output/women_calibration_weighted_missingness.csv", replace
+save "output/men_calibration_weighted_missingness.dta", replace
+export delimited using "output/men_calibration_weighted_missingness.csv", replace
 restore
 
 /* ---------------- Balance table before and after weighting ------------ */
@@ -641,18 +642,18 @@ use "`balance_results'", clear
 generate double abs_smd_weighted = abs(smd_weighted)
 generate double abs_smd_weighted_p99 = abs(smd_weighted_p99)
 sort characteristic age_band measure
-save "output/women_calibration_balance.dta", replace
-export delimited using "output/women_calibration_balance.csv", replace
+save "output/men_calibration_balance.dta", replace
+export delimited using "output/men_calibration_balance.csv", replace
 restore
 
 /* ---------------- Save patient-level analysis dataset ---------------- */
 drop eb_a* eb_b* eb_m* eb_v*
 compress
-save "output/dxa_eligible_women_calibration_weights.dta", replace
+save "output/dxa_eligible_men_calibration_weights.dta", replace
 
-display as result "Calibration weighting completed for `source_n' DXA-eligible women."
-display as result "Patient-level weights: output/dxa_eligible_women_calibration_weights.dta"
-display as result "Balance table: output/women_calibration_balance.csv"
-display as result "Weight diagnostics: output/women_calibration_weight_diagnostics.csv"
-display as result "Missingness table: output/women_calibration_missingness.csv"
-display as result "Weighted missingness table: output/women_calibration_weighted_missingness.csv"
+display as result "Calibration weighting completed for `source_n' DXA-eligible men."
+display as result "Patient-level weights: output/dxa_eligible_men_calibration_weights.dta"
+display as result "Balance table: output/men_calibration_balance.csv"
+display as result "Weight diagnostics: output/men_calibration_weight_diagnostics.csv"
+display as result "Missingness table: output/men_calibration_missingness.csv"
+display as result "Weighted missingness table: output/men_calibration_weighted_missingness.csv"

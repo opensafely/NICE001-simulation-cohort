@@ -35,3 +35,14 @@ actions:
         balance: output/women_calibration_balance.csv
         weight_diagnostics: output/women_calibration_weight_diagnostics.csv        
         missingness_exact: output/women_calibration_missingness.csv
+
+  calibrate_men:
+    run: stata-mp:v1 analysis/men_calibration_weighting.do
+    needs: [identify_dxa_eligible]
+    outputs:
+      highly_sensitive:
+        patient_weights: output/dxa_eligible_men_calibration_weights.dta
+      moderately_sensitive:
+        balance: output/men_calibration_balance.csv
+        weight_diagnostics: output/men_calibration_weight_diagnostics.csv        
+        missingness_exact: output/men_calibration_missingness.csv
