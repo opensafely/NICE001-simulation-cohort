@@ -334,7 +334,7 @@ forvalues h = 1/4 {
     local target_value = M_bmi_broad[1, `h']
     quietly count if cal_agebroad == `h'
     local ntotal = r(N)
-    quietly summarize cal_bmi if cal_agebroad == `h', meanonly
+    quietly summarize cal_bmi if cal_agebroad == `h'
     local nobserved = r(N)
     local source_value = r(mean)
     local source_min = r(min)
