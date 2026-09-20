@@ -33,8 +33,10 @@ actions:
         patient_weights: output/dxa_eligible_women_calibration_weights.dta
       moderately_sensitive:
         balance: output/women_calibration_balance.csv
-        weight_diagnostics: output/women_calibration_weight_diagnostics.csv        
+        weight_diagnostics: output/women_calibration_weight_diagnostics.csv
         missingness_exact: output/women_calibration_missingness.csv
+        weighted_missingness_exact: output/women_calibration_weighted_missingness.csv
+        feasibility: output/women_calibration_feasibility.csv
 
   calibrate_men:
     run: stata-mp:v1 analysis/men_calibration_weighting.do
@@ -44,5 +46,7 @@ actions:
         patient_weights: output/dxa_eligible_men_calibration_weights.dta
       moderately_sensitive:
         balance: output/men_calibration_balance.csv
-        weight_diagnostics: output/men_calibration_weight_diagnostics.csv        
+        weight_diagnostics: output/men_calibration_weight_diagnostics.csv
         missingness_exact: output/men_calibration_missingness.csv
+        weighted_missingness_exact: output/men_calibration_weighted_missingness.csv
+        feasibility: output/men_calibration_feasibility.csv

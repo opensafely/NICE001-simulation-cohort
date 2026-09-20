@@ -47,6 +47,23 @@ matrix SD_bmi = ( ///
 scalar target_bmi_mean_all = 27.04243745991023
 scalar target_bmi_sd_all   =  4.198788601895486
 
+* Fail if any required target is missing.
+assert !missing(`target_total') & `target_total' > 0
+assert !missing(scalar(target_bmi_mean_all))
+assert !missing(scalar(target_bmi_sd_all)) & scalar(target_bmi_sd_all) > 0
+foreach target_matrix in N_age C_lowbmi C_prevfx C_smoke C_alcohol C_ra C_steroid C_secondary M_bmi SD_bmi {
+    forvalues g = 1/9 {
+        assert !missing(`target_matrix'[1, `g'])
+    }
+}
+
+* Verify that the age counts reproduce stated total.
+scalar __target_n_check = 0
+forvalues g = 1/9 {
+    scalar __target_n_check = scalar(__target_n_check) + N_age[1, `g']
+}
+assert scalar(__target_n_check) == `target_total'
+
 * Convert target counts into within-age proportions.
 foreach characteristic in lowbmi prevfx smoke alcohol ra steroid secondary {
     matrix P_`characteristic' = J(1, 9, .)
@@ -54,6 +71,62 @@ foreach characteristic in lowbmi prevfx smoke alcohol ra steroid secondary {
         matrix P_`characteristic'[1, `g'] = C_`characteristic'[1, `g'] / N_age[1, `g']
     }
 }
+
+* Calibrate binary risks and BMI within four broader age groups. The original
+* five-year targets are retained below for detailed balance diagnostics.
+* Broad groups: 50-59, 60-69, 70-79, 80+.
+matrix B_start = (1, 3, 5, 7)
+matrix B_end   = (2, 4, 6, 9)
+matrix N_broad = J(1, 4, .)
+matrix M_bmi_broad = J(1, 4, .)
+matrix VAR_bmi_broad = J(1, 4, .)
+matrix SD_bmi_broad = J(1, 4, .)
+
+foreach characteristic in lowbmi prevfx smoke alcohol ra steroid secondary {
+    matrix C_`characteristic'_broad = J(1, 4, 0)
+    matrix P_`characteristic'_broad = J(1, 4, .)
+}
+
+forvalues h = 1/4 {
+    local first = B_start[1, `h']
+    local last  = B_end[1, `h']
+    scalar __broad_n = 0
+    scalar __broad_bmi_sum = 0
+    foreach characteristic in lowbmi prevfx smoke alcohol ra steroid secondary {
+        scalar __broad_count_`characteristic' = 0
+    }
+
+    forvalues g = `first'/`last' {
+        scalar __broad_n = scalar(__broad_n) + N_age[1, `g']
+        scalar __broad_bmi_sum = scalar(__broad_bmi_sum) + N_age[1, `g'] * M_bmi[1, `g']
+        foreach characteristic in lowbmi prevfx smoke alcohol ra steroid secondary {
+            scalar __broad_count_`characteristic' = scalar(__broad_count_`characteristic') + C_`characteristic'[1, `g']
+        }
+    }
+
+    matrix N_broad[1, `h'] = scalar(__broad_n)
+    matrix M_bmi_broad[1, `h'] = scalar(__broad_bmi_sum) / scalar(__broad_n)
+
+    foreach characteristic in lowbmi prevfx smoke alcohol ra steroid secondary {
+        matrix C_`characteristic'_broad[1, `h'] = scalar(__broad_count_`characteristic')
+        matrix P_`characteristic'_broad[1, `h'] = scalar(__broad_count_`characteristic') / scalar(__broad_n)
+    }
+
+    * Pool the five-year sample SDs into a broad-age population variance.
+    scalar __broad_ss = 0
+    forvalues g = `first'/`last' {
+        scalar __broad_ss = scalar(__broad_ss) + (N_age[1, `g'] - 1) * SD_bmi[1, `g']^2 + ///
+            N_age[1, `g'] * (M_bmi[1, `g'] - M_bmi_broad[1, `h'])^2
+    }
+    matrix VAR_bmi_broad[1, `h'] = scalar(__broad_ss) / scalar(__broad_n)
+    matrix SD_bmi_broad[1, `h'] = sqrt(scalar(__broad_ss) / (scalar(__broad_n) - 1))
+}
+
+scalar __broad_n_check = 0
+forvalues h = 1/4 {
+    scalar __broad_n_check = scalar(__broad_n_check) + N_broad[1, `h']
+}
+assert scalar(__broad_n_check) == `target_total'
 
 /* ---------------- Harmonised OpenSAFELY variables --------------------- */
 generate byte cal_ageband = .
@@ -71,6 +144,15 @@ assert !missing(cal_ageband)
 label define cal_ageband_label 1 "50-54" 2 "55-59" 3 "60-64" 4 "65-69" 5 "70-74" 6 "75-79" 7 "80-84" 8 "85-89" 9 "90+"
 label values cal_ageband cal_ageband_label
 
+generate byte cal_agebroad = .
+replace cal_agebroad = 1 if inrange(cal_ageband, 1, 2)
+replace cal_agebroad = 2 if inrange(cal_ageband, 3, 4)
+replace cal_agebroad = 3 if inrange(cal_ageband, 5, 6)
+replace cal_agebroad = 4 if inrange(cal_ageband, 7, 9)
+assert !missing(cal_agebroad)
+label define cal_agebroad_label 1 "50-59" 2 "60-69" 3 "70-79" 4 "80+"
+label values cal_agebroad cal_agebroad_label
+
 generate double cal_bmi = bmi_raw if inrange(bmi_raw, 10, 80)
 generate byte cal_lowbmi = cal_bmi <= 19 if !missing(cal_bmi)
 
@@ -80,8 +162,8 @@ drop __previous_fracture_max
 
 
 generate byte cal_smoke = .
-replace cal_smoke = 1 if inrange(qf_smoke_cat, 2, 4) | smoking_current_unknown == 1
 replace cal_smoke = 0 if inlist(qf_smoke_cat, 0, 1)
+replace cal_smoke = 1 if inrange(qf_smoke_cat, 2, 4) | smoking_current_unknown == 1
 assert !missing(cal_smoke) if smoking_no_record == 0
 generate byte cal_alcohol = inrange(qf_alcohol_cat6, 3, 5) if !missing(qf_alcohol_cat6)
 generate byte cal_ra = b_ra if !missing(b_ra)
@@ -98,16 +180,23 @@ label variable cal_steroid  ">=2 oral corticosteroid prescriptions in prior 6 mo
 label variable cal_secondary "FRAX secondary osteoporosis proxy"
 
 local core_binary_variables cal_prevfx cal_steroid cal_ra cal_smoke
-local core_binary_target_matrices P_prevfx P_steroid P_ra P_smoke
+local core_binary_target_matrices P_prevfx_broad P_steroid_broad P_ra_broad P_smoke_broad
 
 local full_binary_variables `core_binary_variables' cal_secondary cal_alcohol
-local full_binary_target_matrices `core_binary_target_matrices' P_secondary P_alcohol
+local full_binary_target_matrices `core_binary_target_matrices' P_secondary_broad P_alcohol_broad
 
 local bmi_binary_variables cal_lowbmi
-local bmi_binary_target_matrices P_lowbmi
+local bmi_binary_target_matrices P_lowbmi_broad
 
+* Variables and five-year target matrices used for the balance table.
 local binary_variables `full_binary_variables' `bmi_binary_variables'
-local binary_target_matrices `full_binary_target_matrices' `bmi_binary_target_matrices'
+local binary_target_matrices P_prevfx P_steroid P_ra P_smoke ///
+    P_secondary P_alcohol P_lowbmi
+
+* Variables and broad-age target matrices supplied to the calibration solver.
+local calibration_binary_variables `full_binary_variables' `bmi_binary_variables'
+local cali_binary_target_matrices ///
+    `full_binary_target_matrices' `bmi_binary_target_matrices'
 
 foreach variable of local binary_variables {
     assert inlist(`variable', 0, 1, .)
@@ -157,45 +246,136 @@ export delimited using "output/men_calibration_missingness.csv", replace
 restore
 
 /* ---------------- Feasibility and overlap checks --------------------- */
+tempname feasibility_post
+tempfile feasibility_results
+
+postfile `feasibility_post' ///
+    str20 check_type str80 characteristic ///
+    str12 age_band double target_value source_value ///
+    source_min source_max source_sd ///
+    n_total n_observed n_missing n_zero n_one ///
+    str8 status str100 reason ///
+    using "`feasibility_results'", replace
+
+/* Check that every five-year age band is represented. */
 forvalues g = 1/9 {
+    local group_label : label cal_ageband_label `g'
     quietly count if cal_ageband == `g'
-    if r(N) == 0 {
-        local group_label : label cal_ageband_label `g'
-        display as error "No OpenSAFELY men in age band `group_label'."
-        exit 459
+    local ntotal = r(N)
+    local target_value = N_age[1, `g'] / `target_total'
+    local source_value = `ntotal' / `source_n'
+    local status "PASS"
+    local reason ""
+    if `ntotal' == 0 {
+        local status "FAIL"
+        local reason "No source observations in this age band"
     }
+    post `feasibility_post' ///
+        ("age_support") ///
+        ("Age distribution") ///
+        ("`group_label'") ///
+        (`target_value') (`source_value') ///
+        (.) (.) (.) ///
+        (`ntotal') (`ntotal') (0) (.) (.) ///
+        ("`status'") ("`reason'")
 }
 
-local n_binary : word count `binary_variables'
-forvalues j = 1/`n_binary' {
-    local variable : word `j' of `binary_variables'
-    local target_matrix : word `j' of `binary_target_matrices'
-
-    forvalues g = 1/9 {
-        scalar __target_p = `target_matrix'[1, `g']
-        assert scalar(__target_p) > 0 & scalar(__target_p) < 1
-
-        quietly count if cal_ageband == `g' & `variable' == 0
+/* Check binary-variable overlap within broad age groups. */
+local n_calibration_binary : word count `calibration_binary_variables'
+forvalues j = 1/`n_calibration_binary' {
+    local variable : word `j' of `calibration_binary_variables'
+    local target_matrix : word `j' of `cali_binary_target_matrices'
+    local characteristic : variable label `variable'
+    forvalues h = 1/4 {
+        local group_label : label cal_agebroad_label `h'
+        local target_value = `target_matrix'[1, `h']
+        quietly count if cal_agebroad == `h'
+        local ntotal = r(N)
+        quietly count if cal_agebroad == `h' & `variable' == 0
         local n0 = r(N)
-        quietly count if cal_ageband == `g' & `variable' == 1
+        quietly count if cal_agebroad == `h' & `variable' == 1
         local n1 = r(N)
-
-        if `n0' == 0 | `n1' == 0 {
-            local group_label : label cal_ageband_label `g'
-            display as error ///
-                "Insufficient overlap: `variable' has no observed 0 or 1 in age band `group_label'."
-            exit 459
+        local nobserved = `n0' + `n1'
+        local nmissing = `ntotal' - `nobserved'
+        local source_value = .
+        if `nobserved' > 0 {
+            local source_value = `n1' / `nobserved'
         }
+        local status "PASS"
+        local reason ""
+        if missing(`target_value') | ///
+            `target_value' <= 0 | `target_value' >= 1 {
+            local status "FAIL"
+            local reason "Target proportion is not between 0 and 1"
+        }
+        if `n0' == 0 | `n1' == 0 {
+            local status "FAIL"
+            if "`reason'" != "" {
+                local reason "`reason'; no observed 0 or 1"
+            }
+            else {
+                local reason "No observed 0 or 1"
+            }
+        }
+        post `feasibility_post' ///
+            ("binary_overlap") ///
+            ("`characteristic'") ///
+            ("`group_label'") ///
+            (`target_value') (`source_value') ///
+            (0) (1) (.) ///
+            (`ntotal') (`nobserved') (`nmissing') (`n0') (`n1') ///
+            ("`status'") ("`reason'")
     }
 }
 
-forvalues g = 1/9 {
-    quietly summarize cal_bmi if cal_ageband == `g'
-    if r(N) < 2 | r(sd) == 0 | missing(r(sd)) {
-        local group_label : label cal_ageband_label `g'
-        display as error "Insufficient BMI variation in age band `group_label'."
-        exit 459
+/* Check BMI variation and whether the target mean is within source range. */
+forvalues h = 1/4 {
+    local group_label : label cal_agebroad_label `h'
+    local target_value = M_bmi_broad[1, `h']
+    quietly count if cal_agebroad == `h'
+    local ntotal = r(N)
+    quietly summarize cal_bmi if cal_agebroad == `h', meanonly
+    local nobserved = r(N)
+    local source_value = r(mean)
+    local source_min = r(min)
+    local source_max = r(max)
+    local source_sd = r(sd)
+    local nmissing = `ntotal' - `nobserved'
+    local status "PASS"
+    local reason ""
+    if `nobserved' < 2 | missing(`source_sd') | `source_sd' == 0 {
+        local status "FAIL"
+        local reason "Fewer than two BMI values or no BMI variation"
     }
+    else if `target_value' < `source_min' | ///
+            `target_value' > `source_max' {
+        local status "FAIL"
+        local reason "Target BMI mean is outside the source BMI range"
+    }
+    post `feasibility_post' ///
+        ("bmi_overlap") ///
+        ("BMI") ///
+        ("`group_label'") ///
+        (`target_value') (`source_value') ///
+        (`source_min') (`source_max') (`source_sd') ///
+        (`ntotal') (`nobserved') (`nmissing') (.) (.) ///
+        ("`status'") ("`reason'")
+}
+postclose `feasibility_post'
+
+/* Save the report before stopping for any failure. */
+preserve
+use "`feasibility_results'", clear
+sort check_type characteristic age_band
+quietly count if status == "FAIL"
+local n_feasibility_failures = r(N)
+save "output/men_calibration_feasibility.dta", replace
+export delimited using "output/men_calibration_feasibility.csv", replace
+restore
+
+if `n_feasibility_failures' > 0 {
+    display as error "`n_feasibility_failures' feasibility checks failed."
+    display as error "See output/men_calibration_feasibility.csv."
 }
 
 /* ---------------- Construct centred calibration moments -------------- */
@@ -212,44 +392,50 @@ forvalues g = 1/9 {
 
 local f_core_binary ""
 local f_full_binary ""
-local f_full_bmi_binary ""
+local f_bmi_low_terms ""
 
-forvalues j = 1/`n_binary' {
-    local variable : word `j' of `binary_variables'
-    local target_matrix : word `j' of `binary_target_matrices'
+forvalues j = 1/`n_calibration_binary' {
+    local variable : word `j' of `calibration_binary_variables'
+    local target_matrix : word `j' of `cali_binary_target_matrices'
     local is_core : list variable in core_binary_variables
     local is_full : list variable in full_binary_variables
+    local is_bmi : list variable in bmi_binary_variables
 
-    forvalues g = 1/9 {
-        scalar __target_p = `target_matrix'[1, `g']
-        generate double eb_b`j'_`g' = 0
-        replace eb_b`j'_`g' = `variable' - scalar(__target_p) if cal_ageband == `g' & !missing(`variable')
-        local f_full_bmi_binary "`f_full_bmi_binary' eb_b`j'_`g'"
+    forvalues h = 1/4 {
+        scalar __target_p = `target_matrix'[1, `h']
+        generate double eb_b`j'_`h' = 0
+        replace eb_b`j'_`h' = `variable' - scalar(__target_p) if cal_agebroad == `h' & !missing(`variable')
         if `is_full' {
-            local f_full_binary "`f_full_binary' eb_b`j'_`g'"
+            local f_full_binary "`f_full_binary' eb_b`j'_`h'"
         }
         if `is_core' {
-            local f_core_binary "`f_core_binary' eb_b`j'_`g'"
+            local f_core_binary "`f_core_binary' eb_b`j'_`h'"
+        }
+        if `is_bmi' {
+            local f_bmi_low_terms "`f_bmi_low_terms' eb_b`j'_`h'"
         }
     }
 }
 
-local f_bmi ""
-forvalues g = 1/9 {
-    scalar __target_mean = M_bmi[1, `g']
-    * Excel PivotTable StdDev is a sample SD. Convert it to the corresponding
-    * population central moment before imposing the weighted moment constraint.
-    scalar __target_var_pop = ((N_age[1, `g'] - 1) / N_age[1, `g']) * SD_bmi[1, `g']^2
-    generate double eb_m`g' = 0
-    replace eb_m`g' = (cal_bmi - scalar(__target_mean)) / 10 if cal_ageband == `g' & !missing(cal_bmi)
-    generate double eb_v`g' = 0
-    replace eb_v`g' = ((cal_bmi - scalar(__target_mean))^2 - scalar(__target_var_pop)) / 100 if cal_ageband == `g' & !missing(cal_bmi)
-    local f_bmi "`f_bmi' eb_m`g' eb_v`g'"
+local f_bmi_mean_terms ""
+local f_bmi_var_terms ""
+forvalues h = 1/4 {
+    scalar __target_mean = M_bmi_broad[1, `h']
+    scalar __target_var_pop = VAR_bmi_broad[1, `h']
+    generate double eb_m`h' = 0
+    replace eb_m`h' = (cal_bmi - scalar(__target_mean)) / 10 if cal_agebroad == `h' & !missing(cal_bmi)
+    generate double eb_v`h' = 0
+    replace eb_v`h' = ((cal_bmi - scalar(__target_mean))^2 - scalar(__target_var_pop)) / 100 ///
+        if cal_agebroad == `h' & !missing(cal_bmi)
+    local f_bmi_mean_terms "`f_bmi_mean_terms' eb_m`h'"
+    local f_bmi_var_terms "`f_bmi_var_terms' eb_v`h'"
 }
 
-local f_core     "`f_age' `f_core_binary'"
-local f_full     "`f_age' `f_full_binary'"
-local f_full_bmi "`f_age' `f_full_bmi_binary' `f_bmi'"
+local f_core        "`f_age' `f_core_binary'"
+local f_full        "`f_age' `f_full_binary'"
+local f_bmi_mean    "`f_full' `f_bmi_mean_terms'"
+local f_bmi_mean_low "`f_bmi_mean' `f_bmi_low_terms'"
+local f_bmi_all     "`f_bmi_mean_low' `f_bmi_var_terms'"
 
 * manualtargets() expects one target mean for every supplied feature, in the
 * same order as the feature list. Age indicators target FRAX's proportions;
@@ -273,18 +459,25 @@ forvalues j = 1/`n_full_binary' {
     local targets_full "`targets_full' 0"
 }
 
-local targets_full_bmi "`targets_age'"
-local n_full_bmi_binary : word count `f_full_bmi_binary'
-forvalues j = 1/`n_full_bmi_binary' {
-    local targets_full_bmi "`targets_full_bmi' 0"
+local targets_bmi_mean "`targets_full'"
+local n_bmi_mean_terms : word count `f_bmi_mean_terms'
+forvalues j = 1/`n_bmi_mean_terms' {
+    local targets_bmi_mean "`targets_bmi_mean' 0"
 }
 
-local n_bmi_features : word count `f_bmi'
-forvalues j = 1/`n_bmi_features' {
-    local targets_full_bmi "`targets_full_bmi' 0"
+local targets_bmi_mean_low "`targets_bmi_mean'"
+local n_bmi_low_terms : word count `f_bmi_low_terms'
+forvalues j = 1/`n_bmi_low_terms' {
+    local targets_bmi_mean_low "`targets_bmi_mean_low' 0"
 }
 
-foreach stage in age core full full_bmi {
+local targets_bmi_all "`targets_bmi_mean_low'"
+local n_bmi_var_terms : word count `f_bmi_var_terms'
+forvalues j = 1/`n_bmi_var_terms' {
+    local targets_bmi_all "`targets_bmi_all' 0"
+}
+
+foreach stage in age core full bmi_mean bmi_mean_low bmi_all {
     local features "`f_`stage''"
     local targets "`targets_`stage''"
     local n_features : word count `features'
@@ -297,7 +490,7 @@ foreach stage in age core full full_bmi {
 }
 
 /* ---------------- Entropy balancing with ebalance -------------------- */
-foreach stage in age core full full_bmi {
+foreach stage in age core full bmi_mean bmi_mean_low bmi_all {
     display as text "Estimating `stage' calibration weights..."
     local features "`f_`stage''"
     local targets "`targets_`stage''"
@@ -349,10 +542,15 @@ foreach stage in age core full full_bmi {
     matrix colnames R_`stage' = converged max_target_deviation min_weight max_weight
 }
 
-generate double calibration_weight = cw_full_bmi
-label variable calibration_weight "Men calibration weight: age + shared risks + BMI targets"
+* Primary specification: exact five-year age balance, broad-age binary-risk
+* balance, broad-age BMI means and broad-age low-BMI prevalence. The bmi_all
+* stage additionally calibrates BMI variance and is retained for sensitivity.
+local primary_stage bmi_mean_low
+generate double calibration_weight = cw_`primary_stage'
+label variable calibration_weight "Men calibration weight: exact age + broad risks + BMI mean/low BMI"
+label variable cw_bmi_all "Sensitivity weight: primary specification plus broad-age BMI SD"
 
-* Sensitivity weight truncated at the final weight's 99th percentile.
+* Sensitivity weight truncated at the primary weight's 99th percentile.
 quietly summarize calibration_weight, detail
 scalar __weight_p99 = r(p99)
 generate double calibration_weight_p99 = min(calibration_weight, scalar(__weight_p99))
@@ -361,12 +559,14 @@ replace calibration_weight_p99 = calibration_weight_p99 / r(mean)
 label variable calibration_weight_p99 "Calibration weight truncated at p99 and renormalised"
 
 * Quantify the loss of exact calibration after truncation against every
-* constraint in the final full_bmi specification.
+* constraint in the primary specification.
 scalar __p99_max_target_deviation = 0
-local n_final_features : word count `f_full_bmi'
+local final_features "`f_bmi_mean_low'"
+local final_targets "`targets_bmi_mean_low'"
+local n_final_features : word count `final_features'
 forvalues j = 1/`n_final_features' {
-    local feature : word `j' of `f_full_bmi'
-    local target : word `j' of `targets_full_bmi'
+    local feature : word `j' of `final_features'
+    local target : word `j' of `final_targets'
     quietly summarize `feature' [aw=calibration_weight_p99], meanonly
     scalar __target_deviation = abs(r(mean) - (`target'))
     if scalar(__target_deviation) > scalar(__p99_max_target_deviation) {
@@ -378,11 +578,11 @@ forvalues j = 1/`n_final_features' {
 tempname weight_post
 tempfile weight_results
 postfile `weight_post' ///
-    str16 stage double converged max_target_deviation ///
+    str24 stage double converged max_target_deviation ///
     mean sd min p1 p50 p99 max effective_sample_size effective_sample_size_pct ///
     using "`weight_results'", replace
 
-foreach stage in age core full full_bmi {
+foreach stage in age core full bmi_mean bmi_mean_low bmi_all {
     quietly summarize cw_`stage', detail
     local wmean = r(mean)
     local wsd = r(sd)
@@ -534,8 +734,8 @@ forvalues g = 1/9 {
         (scalar(__smd_w_p99))
 }
 
-local binary_labels previous_fracture corticosteroids rheumatoid_arthritis ///
-    current_smoking secondary_osteoporosis alcohol_3plus low_bmi
+local binary_labels previous_fracture corticosteroids rheumatoid_arthritis current_smoking secondary_osteoporosis alcohol_3plus low_bmi
+local n_binary : word count `binary_variables'    
 forvalues j = 1/`n_binary' {
     local variable : word `j' of `binary_variables'
     local target_matrix : word `j' of `binary_target_matrices'
@@ -641,6 +841,8 @@ preserve
 use "`balance_results'", clear
 generate double abs_smd_weighted = abs(smd_weighted)
 generate double abs_smd_weighted_p99 = abs(smd_weighted_p99)
+generate double abs_diff_weighted = abs(weighted - target)
+generate double abs_diff_weighted_p99 = abs(weighted_p99 - target)
 sort characteristic age_band measure
 save "output/men_calibration_balance.dta", replace
 export delimited using "output/men_calibration_balance.csv", replace
