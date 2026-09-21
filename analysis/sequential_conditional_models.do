@@ -139,7 +139,7 @@ end
 capture program drop scm_fit_logit
 program define scm_fit_logit
     version 16.1
-    syntax, SEX(string) SEQUENCE(integer) MODELID(string) OUTCOME(name) PREDICTORS(string asis) [RESTRICTION(string asis) BRANCH(string) RULE(string asis)]
+    syntax, SEX(string) SEQUENCE(integer) MODELID(string) OUTCOME(name) PREDICTORS(string) [RESTRICTION(string) BRANCH(string) RULE(string)]
 
     if `"`restriction'"' == "" local restriction "1"
     if "`branch'" == "" local branch "all"
@@ -255,8 +255,8 @@ capture program drop scm_fit_mlogit
 program define scm_fit_mlogit
     version 16.1
     syntax, SEX(string) SEQUENCE(integer) MODELID(string) OUTCOME(name) ///
-        PREDICTORS(string asis) BASE(integer) EXPECTEDLEVELS(string asis) ///
-        [RESTRICTION(string asis) BRANCH(string) RULE(string asis)]
+        PREDICTORS(string) BASE(integer) EXPECTEDLEVELS(string) ///
+        [RESTRICTION(string) BRANCH(string) RULE(string)]
 
     if `"`restriction'"' == "" local restriction "1"
     if "`branch'" == "" local branch "all"
