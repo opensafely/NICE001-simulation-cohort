@@ -303,8 +303,7 @@ forvalues j = 1/`n_calibration_binary' {
         }
         local status "PASS"
         local reason ""
-        if missing(`target_value') | ///
-            `target_value' <= 0 | `target_value' >= 1 {
+        if missing(`target_value') | `target_value' <= 0 | `target_value' >= 1 {
             local status "FAIL"
             local reason "Target proportion is not between 0 and 1"
         }
@@ -347,8 +346,7 @@ forvalues h = 1/4 {
         local status "FAIL"
         local reason "Fewer than two BMI values or no BMI variation"
     }
-    else if `target_value' < `source_min' | ///
-            `target_value' > `source_max' {
+    else if `target_value' < `source_min' | `target_value' > `source_max' {
         local status "FAIL"
         local reason "Target BMI mean is outside the source BMI range"
     }
@@ -425,8 +423,7 @@ forvalues h = 1/4 {
     generate double eb_m`h' = 0
     replace eb_m`h' = (cal_bmi - scalar(__target_mean)) / 10 if cal_agebroad == `h' & !missing(cal_bmi)
     generate double eb_v`h' = 0
-    replace eb_v`h' = ((cal_bmi - scalar(__target_mean))^2 - scalar(__target_var_pop)) / 100 ///
-        if cal_agebroad == `h' & !missing(cal_bmi)
+    replace eb_v`h' = ((cal_bmi - scalar(__target_mean))^2 - scalar(__target_var_pop)) / 100 if cal_agebroad == `h' & !missing(cal_bmi)
     local f_bmi_mean_terms "`f_bmi_mean_terms' eb_m`h'"
     local f_bmi_var_terms "`f_bmi_var_terms' eb_v`h'"
 }
