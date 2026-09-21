@@ -16,7 +16,7 @@ local ebal_tolerance 0.000001
 local verify_tolerance 0.00001
 
 use "output/dxa_eligible_population.dta", clear
-keep if dxa_eligible == 1 & qfracture_calculable == 1
+keep if dxa_eligible == 1
 keep if lower(strtrim(sex)) == "female"
 quietly count
 local source_n = r(N)
