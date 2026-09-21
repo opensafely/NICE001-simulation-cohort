@@ -50,3 +50,18 @@ actions:
         missingness_exact: output/men_calibration_missingness.csv
         weighted_missingness_exact: output/men_calibration_weighted_missingness.csv
         feasibility: output/men_calibration_feasibility.csv
+
+  sequential_conditional_models:
+    run: stata-mp:v1 analysis/sequential_conditional_models.do
+    needs:
+      - calibrate_women
+      - calibrate_men
+    outputs:
+      moderately_sensitive:
+        coefficients_release: output/release/sequential_model_coefficients_release.csv
+        manifest_release: output/release/sequential_model_manifest.csv
+        mapping_rules_release: output/release/sequential_model_mapping_rules.csv
+        model_diagnostics_internal: output/internal/sequential_model_diagnostics_internal.csv
+        category_diagnostics_internal: output/internal/sequential_model_category_diagnostics_internal.csv
+        cohort_diagnostics_internal: output/internal/sequential_model_cohort_diagnostics_internal.csv
+  
