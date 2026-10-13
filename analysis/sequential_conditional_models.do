@@ -414,15 +414,12 @@ foreach sex in women men {
         qf_alcohol_cat6 fh_parental_osteoporosis ///
         b_type1 b_liver b_malabsorption b_renal b_type2 ///
         b_asthmacopd b_anycancer b_cvd b_epilepsy2 b_parkinsons ///
-        b_dementia b_sle b_antidepressant b_falls ///
+        b_dementia b_sle b_antidepressant b_carehome b_falls ///
         dx_hip_fracture_n dx_vertebral_fracture_n ///
         dx_wrist_fracture_n dx_proximal_humerus_fracture_n
 
     if "`sex'" == "women" {
         local required_variables `required_variables' b_endocrine b_hrt_oest
-    }
-    if "`sex'" == "men" {
-        local required_variables `required_variables' b_carehome
     }
 
     foreach variable of local required_variables {
@@ -648,6 +645,13 @@ foreach sex in women men {
             modelid("09b_hrt_oestrogen") outcome(b_hrt_oest) ///
             predictors(`"`predictors_09'"')
         local predictors_09 "`predictors_09' i.b_hrt_oest"
+
+        * Care-home residency is also needed for baseline utility in women.
+        scm_fit_logit, sex("`sex'") sequence(9) ///
+            modelid("09c_carehome") outcome(b_carehome) ///
+            predictors(`"`predictors_09'"') ///
+            rule("Draw 0=not resident or 1=care-home resident before falls and prior-fracture site indicators")
+        local predictors_09 "`predictors_09' i.b_carehome"
     }
 
     if "`sex'" == "men" {
