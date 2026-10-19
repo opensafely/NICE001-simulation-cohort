@@ -37,6 +37,7 @@ actions:
         missingness_exact: output/women_calibration_missingness.csv
         weighted_missingness_exact: output/women_calibration_weighted_missingness.csv
         feasibility: output/women_calibration_feasibility.csv
+        cohort_flow: output/women_calibration_cohort_flow.csv
 
   calibrate_men:
     run: stata-mp:v1 analysis/s04_calibration_weighting/men_calibration_weighting.do
@@ -50,6 +51,7 @@ actions:
         missingness_exact: output/men_calibration_missingness.csv
         weighted_missingness_exact: output/men_calibration_weighted_missingness.csv
         feasibility: output/men_calibration_feasibility.csv
+        cohort_flow: output/men_calibration_cohort_flow.csv
 
   sequential_conditional_models:
     run: stata-mp:v1 analysis/s05_sequential_conditional_models/sequential_conditional_models.do

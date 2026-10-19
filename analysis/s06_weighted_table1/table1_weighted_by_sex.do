@@ -14,11 +14,19 @@ local minimum_ess 8
 local round_base 5
 local write_internal_audit 1
 local weight_variable calibration_weight
-local cohort_scope "weighted_input"  
+local cohort_scope "model_complete"  
 
+if !inlist("`cohort_scope'", "model_complete", "weighted_input") {
+    display as error "cohort_scope must be model_complete or weighted_input."
+    exit 198
+}
 capture mkdir "output"
 capture mkdir "`outdir'"
 capture mkdir "`internal_dir'"
+foreach filename in table1_weighted_women.csv table1_weighted_men.csv {
+    capture erase "`outdir'/`filename'"
+}
+capture erase "`internal_dir'/table1_weighted_by_sex_sdc_audit.csv"
 
 tempname table_post
 tempfile table_results
@@ -26,7 +34,7 @@ postfile `table_post' ///
     int row_order int category_order str8 sex str16 cohort_scope ///
     str32 variable str100 characteristic str80 category str16 statistic ///
     double n_cohort n_observed n_missing n_denominator n_category ///
-    weighted_pct weighted_mean weighted_sd byte cell_unsafe double minimum_support_ess ///
+    weighted_denominator_exact weighted_pct weighted_mean weighted_sd byte cell_unsafe double minimum_support_ess ///
     using "`table_results'", replace
 
 /* Define t1_support. */
@@ -75,11 +83,13 @@ program define t1_weighted_variable
     t1_support `observed', weight(`weight') threshold(`threshold') miness(`miness')
     local unsafe = r(unsafe)
     local ess_min = r(ess)
+    local sumw_observed = r(sumw)
     t1_support `missing_flag', weight(`weight') threshold(`threshold') miness(`miness')
     local unsafe = max(`unsafe', r(unsafe))
     local ess_min = min(`ess_min', r(ess))
-    quietly summarize `missing_flag' [aw=`weight'], meanonly
-    local missing_pct = 100 * r(mean)
+    local sumw_missing = r(sumw)
+    local sumw_cohort = `sumw_observed' + `sumw_missing'
+    local missing_pct = 100 * `sumw_missing' / `sumw_cohort' 
 
     if "`levels'" == "" {
         local weighted_mean = .
@@ -92,7 +102,7 @@ program define t1_weighted_variable
         post `handle' (`order') (1) ("`sex'") ("`scope'") ///
             ("`varlist'") (`"`characteristic'"') ("") ("mean_sd") ///
             (`n_cohort') (`n_observed') (`n_missing') (`n_observed') (.) ///
-            (.) (`weighted_mean') (`weighted_sd') (`unsafe') (`ess_min')
+            (`sumw_observed') (.) (`weighted_mean') (`weighted_sd') (`unsafe') (`ess_min')
     }
     else {
         /* levels(1) is shorthand for a binary Yes row; validate both 0 and 1. */
@@ -122,18 +132,24 @@ program define t1_weighted_variable
             quietly replace `category_flag' = (`varlist' == `value')
             quietly count if `category_flag' == 1
             local n_category = r(N)
-            quietly summarize `category_flag' [aw=`weight'], meanonly
-            local weighted_pct = 100 * r(mean)
+            /* Category percentages condition on the outcome being observed. */
+            local sumw_category = 0
+            if `n_category' > 0 {
+                quietly summarize `weight' if `category_flag' == 1, meanonly
+                local sumw_category = r(sum)
+            }
+            local weighted_pct = .
+            if `sumw_observed' > 0 local weighted_pct = 100 * `sumw_category' / `sumw_observed' 
             post `handle' (`order') (`category_order') ("`sex'") ("`scope'") ///
                 ("`varlist'") (`"`characteristic'"') (`"`category'"') ("percent") ///
-                (`n_cohort') (`n_observed') (`n_missing') (`n_cohort') (`n_category') ///
-                (`weighted_pct') (.) (.) (`unsafe') (`ess_min')
+                (`n_cohort') (`n_observed') (`n_missing') (`n_observed') (`n_category') ///
+                (`sumw_observed') (`weighted_pct') (.) (.) (`unsafe') (`ess_min')
         }
     }
     post `handle' (`order') (99) ("`sex'") ("`scope'") ///
         ("`varlist'") (`"`characteristic'"') ("Missing") ("percent") ///
         (`n_cohort') (`n_observed') (`n_missing') (`n_cohort') (`n_missing') ///
-        (`missing_pct') (.) (.) (`unsafe') (`ess_min')
+        (`sumw_cohort') (`missing_pct') (.) (.) (`unsafe') (`ess_min')
 end
 
 /* -------------------------- Women and men --------------------------- */
@@ -142,6 +158,18 @@ foreach sex in women men {
     if "`sex'" == "men"   local input_data "`men_data'"
     confirm file "`input_data'"
     use "`input_data'", clear
+    /* Require weights re-estimated AFTER common-core selection. */
+    local calibration_scope : char _dta[calibration_scope]
+    if "`calibration_scope'" != "core_complete_v1" {
+        display as error "Old or incompatible weights: rerun the revised women and men calibration actions."
+        exit 459
+    }
+    capture assert !missing(age, cal_bmi, cal_prevfx, cal_smoke, cal_alcohol, ///
+        cal_steroid, cal_ra, cal_secondary, `weight_variable') & `weight_variable' > 0
+    if _rc {
+        display as error "Table 1 requires the same core-complete population used for calibration."
+        exit 459
+    }
 
     local core_variables ///
         age cal_bmi cal_prevfx cal_smoke cal_alcohol cal_steroid cal_ra cal_secondary
@@ -278,7 +306,7 @@ foreach sex in women men {
     post `table_post' (0) (0) ("`sex'") ("`cohort_scope'") ///
         ("_population") ("Population") ("Total") ("count") ///
         (`n_cohort') (`n_cohort') (0) (`n_cohort') (`n_cohort') ///
-        (.) (.) (.) (`cohort_unsafe') (`cohort_ess')
+        (`n_cohort') (.) (.) (.) (`cohort_unsafe') (`cohort_ess')
 
     /* Same broad order as the supplied Table 1; additional calibration inputs last. */
     local variables age t1_ageband cal_bmi cal_prevfx t1_fx_hip ///
@@ -332,7 +360,8 @@ quietly replace block_unsafe = max(block_unsafe, cohort_unsafe)
 sort row_order category_order sex
 
 /* Exact normalized weighted counts stay inside the secure audit. */
-generate double weighted_count = (weighted_pct/100) * n_cohort if statistic == "percent"
+generate double weighted_count = (weighted_pct/100) * weighted_denominator_exact if statistic == "percent"
+quietly replace weighted_count = 0 if statistic == "percent" & n_category == 0
 
 /* Highly sensitive audit only: no raw fields enter release exports. */
 if `write_internal_audit' {
@@ -342,6 +371,7 @@ if `write_internal_audit' {
 /* Actual n is nonmissing N for continuous rows and category N for categorical rows. */
 generate str20 actual_n = ""
 generate str20 weighted_n = ""
+generate str20 weighted_denominator = ""
 generate str20 mean_release = ""
 generate str20 sd_release = ""
 generate str20 weighted_percent = ""
@@ -350,9 +380,13 @@ quietly replace actual_n = strtrim(string(round(n_cohort, `round_base'), "%15.0f
 quietly replace actual_n = strtrim(string(round(n_observed, `round_base'), "%15.0f")) if statistic == "mean_sd"
 quietly replace actual_n = strtrim(string(round(n_category, `round_base'), "%15.0f")) if statistic == "percent"
 quietly replace weighted_n = strtrim(string(round(weighted_count, `round_base'), "%15.0f")) if statistic == "percent"
+quietly replace weighted_denominator = strtrim(string(round(weighted_denominator_exact, ///
+    `round_base'), "%15.0f")) if statistic == "percent"
+quietly replace weighted_percent = "NA" if statistic == "percent"
 quietly replace weighted_percent = strtrim(string(100 * ///
-    round(weighted_count, `round_base') / round(n_cohort, `round_base'), "%6.1f")) ///
-    if statistic == "percent"
+    round(weighted_count, `round_base') / round(weighted_denominator_exact, `round_base'), "%6.1f")) ///
+    if statistic == "percent" & !missing(weighted_count, weighted_denominator_exact) ///
+    & round(weighted_denominator_exact, `round_base') > 0
 quietly replace mean_release = "NA" if statistic == "mean_sd"
 quietly replace sd_release = "NA" if statistic == "mean_sd"
 quietly replace mean_release = strtrim(string(weighted_mean, "%9.1f")) if statistic == "mean_sd" & !missing(weighted_mean)
@@ -361,6 +395,7 @@ quietly replace sd_release = strtrim(string(weighted_sd, "%9.1f")) if statistic 
 /* Apply the existing block-level suppression to every displayed statistic. */
 quietly replace actual_n = "[REDACTED]" if block_unsafe == 1 & inlist(statistic, "count", "mean_sd", "percent")
 quietly replace weighted_n = "[REDACTED]" if block_unsafe == 1 & statistic == "percent"
+quietly replace weighted_denominator = "[REDACTED]" if block_unsafe == 1 & statistic == "percent"
 quietly replace weighted_percent = "[REDACTED]" if block_unsafe == 1 & statistic == "percent"
 quietly replace mean_release = "[REDACTED]" if block_unsafe == 1 & statistic == "mean_sd"
 quietly replace sd_release = "[REDACTED]" if block_unsafe == 1 & statistic == "mean_sd"
@@ -378,10 +413,10 @@ foreach sex in women men {
         display as error "Release table exceeds the OpenSAFELY 5000-row limit."
         exit 459
     }
-    keep characteristic category actual_n weighted_n mean_release sd_release weighted_percent
+    keep characteristic category actual_n weighted_n weighted_denominator mean_release sd_release weighted_percent
     rename mean_release weighted_mean
     rename sd_release weighted_sd
-    order characteristic category actual_n weighted_n weighted_mean weighted_sd weighted_percent
+    order characteristic category actual_n weighted_n weighted_denominator weighted_mean weighted_sd weighted_percent
     export delimited using "`outdir'/table1_weighted_`sex'.csv", replace
     restore
 }

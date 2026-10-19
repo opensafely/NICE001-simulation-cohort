@@ -1,5 +1,5 @@
 /* Purpose: Estimate entropy-balancing weights that align women in the OpenSAFELY
-DXA-eligible cohort with women treatment-eligible cohort.*/
+core-complete DXA-eligible cohort with women treatment-eligible cohort.*/
 
 version 16.1
 clear all
@@ -15,11 +15,15 @@ local ebal_maxiter 500
 local ebal_tolerance 0.000001
 local verify_tolerance 0.00001
 
+/* A failed rerun must not leave an older weights file available downstream. */
+capture erase "output/dxa_eligible_women_calibration_weights.dta"
+
 use "output/dxa_eligible_population.dta", clear
 keep if dxa_eligible == 1
 keep if lower(strtrim(sex)) == "female"
 quietly count
 local source_n = r(N)
+local dxa_input_n = r(N)
 
 /* ---------------- aggregate targets ---------------------------------- */
 local target_total 16592
@@ -141,7 +145,7 @@ replace cal_ageband = 7 if inrange(age, 80, 84)
 replace cal_ageband = 8 if inrange(age, 85, 89)
 replace cal_ageband = 9 if inrange(age, 90, 99)
 
-assert !missing(cal_ageband)
+assert !missing(cal_ageband) if !missing(age)
 label define cal_ageband_label 1 "50-54" 2 "55-59" 3 "60-64" 4 "65-69" 5 "70-74" 6 "75-79" 7 "80-84" 8 "85-89" 9 "90+"
 label values cal_ageband cal_ageband_label
 
@@ -150,7 +154,7 @@ replace cal_agebroad = 1 if inrange(cal_ageband, 1, 2)
 replace cal_agebroad = 2 if inrange(cal_ageband, 3, 4)
 replace cal_agebroad = 3 if inrange(cal_ageband, 5, 6)
 replace cal_agebroad = 4 if inrange(cal_ageband, 7, 9)
-assert !missing(cal_agebroad)
+assert !missing(cal_agebroad) if !missing(age)
 label define cal_agebroad_label 1 "50-59" 2 "60-69" 3 "70-79" 4 "80+"
 label values cal_agebroad cal_agebroad_label
 
@@ -201,7 +205,17 @@ foreach variable of local binary_variables {
     assert inlist(`variable', 0, 1, .)
 }
 
-/* ---------------- Missingness report --------------------------------- */
+/* ---------------- Common analysis population ------------------------- */
+/* Define completeness using CORE variables only. Current smokers with unknown
+   intensity remain eligible when cal_smoke is known. Additional outcomes are
+   allowed to be missing and are handled separately by each conditional model. */
+local calibration_core_variables age cal_bmi cal_prevfx cal_smoke ///
+    cal_alcohol cal_steroid cal_ra cal_secondary
+generate byte calibration_core_complete = !missing(age, cal_bmi, cal_prevfx, ///
+    cal_smoke, cal_alcohol, cal_steroid, cal_ra, cal_secondary)
+label variable calibration_core_complete "All common core model variables observed"
+
+/* ---------------- Missingness BEFORE core selection ------------------- */
 tempname missing_post
 tempfile missing_results
 postfile `missing_post' ///
@@ -243,6 +257,45 @@ sort characteristic age_band
 save "output/women_calibration_missingness.dta", replace
 export delimited using "output/women_calibration_missingness.csv", replace
 restore
+
+/* Select the common population BEFORE estimating any calibration weights. */
+quietly count if calibration_core_complete == 1
+local core_complete_n = r(N)
+local excluded_core_n = `dxa_input_n' - `core_complete_n'
+if `core_complete_n' == 0 {
+    display as error "No core-complete women remain; calibration was not run."
+    exit 2000
+}
+
+/* Protected flow counts. If a nonzero flow cell is 1-7, suppress all three
+   counts to prevent recovering that cell by subtraction. */
+local flow_unsafe = inrange(`dxa_input_n', 1, 7) | ///
+    inrange(`core_complete_n', 1, 7) | inrange(`excluded_core_n', 1, 7)
+preserve
+clear
+set obs 3
+generate str32 stage = ""
+replace stage = "dxa_eligible_input" in 1
+replace stage = "excluded_missing_core" in 2
+replace stage = "core_complete_calibration" in 3
+generate str20 actual_n = ""
+replace actual_n = strtrim(string(round(`dxa_input_n', 5), "%15.0f")) in 1
+replace actual_n = strtrim(string(round(`excluded_core_n', 5), "%15.0f")) in 2
+replace actual_n = strtrim(string(round(`core_complete_n', 5), "%15.0f")) in 3
+if `flow_unsafe' replace actual_n = "[REDACTED]"
+export delimited using "output/women_calibration_cohort_flow.csv", replace
+restore
+
+keep if calibration_core_complete == 1
+quietly count
+local source_n = r(N)
+assert `source_n' == `core_complete_n'
+assert !missing(age, cal_bmi, cal_prevfx, cal_smoke, cal_alcohol, ///
+    cal_steroid, cal_ra, cal_secondary)
+assert !missing(cal_ageband, cal_agebroad)
+/* source_n, all feasibility checks, all ebalance stages, all balance tables
+   and weighted missingness below now refer to this SAME selected population.
+   The earlier unweighted missingness file describes the pre-selection input. */
 
 /* ---------------- Feasibility and overlap checks --------------------- */
 tempname feasibility_post
@@ -373,6 +426,7 @@ restore
 if `n_feasibility_failures' > 0 {
     display as error "`n_feasibility_failures' feasibility checks failed."
     display as error "See output/women_calibration_feasibility.csv."
+    exit 459
 }
 
 /* ---------------- Construct centred calibration moments -------------- */
@@ -845,6 +899,11 @@ export delimited using "output/women_calibration_balance.csv", replace
 restore
 
 /* ---------------- Save patient-level analysis dataset ---------------- */
+/* Downstream scripts require this provenance marker and verify completeness.
+   Reusing an older full-cohort weights file will therefore fail explicitly. */
+char _dta[calibration_scope] "core_complete_v1"
+char _dta[calibration_core_variables] "age cal_bmi cal_prevfx cal_smoke cal_alcohol cal_steroid cal_ra cal_secondary"
+char _dta[calibration_primary_stage] "`primary_stage'"
 drop eb_a* eb_b* eb_m* eb_v*
 compress
 save "output/dxa_eligible_women_calibration_weights.dta", replace

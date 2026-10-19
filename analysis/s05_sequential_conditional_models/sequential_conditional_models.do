@@ -2,17 +2,6 @@
 
 Purpose:Fit sex-specific, calibration-weighted conditional models in the
 OpenSAFELY DXA-eligible cohort. 
-
-Outputs:
-Release package:
-output/release/sequential_model_coefficients_release.csv
-output/release/sequential_model_manifest.csv
-output/release/sequential_model_mapping_rules.csv
-
-Internal review only:
-output/internal/sequential_model_diagnostics_internal.csv
-output/internal/sequential_model_category_diagnostics_internal.csv
-output/internal/sequential_model_cohort_diagnostics_internal.csv
 */
 
 version 16.1
@@ -401,6 +390,12 @@ foreach sex in women men {
     }
 
     use "`input_data'", clear
+    /* Require weights re-estimated AFTER common-core selection. */
+    local calibration_scope : char _dta[calibration_scope]
+    if "`calibration_scope'" != "core_complete_v1" {
+        display as error "Old or incompatible weights: rerun the revised women and men calibration actions."
+        exit 459
+    }
     capture confirm variable `weight_variable'
     if _rc {
         display as error "Weight variable not found: `weight_variable'"
@@ -460,7 +455,13 @@ foreach sex in women men {
             (`stage_sum_weight') (`stage_ess')
     }
 
-    keep if !missing(age, cal_bmi, cal_prevfx, cal_smoke, cal_alcohol, cal_steroid, cal_ra, cal_secondary, `weight_variable') & `weight_variable' > 0
+    /* This is a verification, not a second population restriction. */
+    capture assert !missing(age, cal_bmi, cal_prevfx, cal_smoke, cal_alcohol, ///
+        cal_steroid, cal_ra, cal_secondary, `weight_variable') & `weight_variable' > 0
+    if _rc {
+        display as error "The calibration dataset is not core-complete; rerun the revised calibration action."
+        exit 459
+    }
     quietly count
     if r(N) == 0 {
         display as error "No `sex' remain in the modelling cohort."
@@ -490,6 +491,9 @@ foreach sex in women men {
     local predictors_behaviour "`predictors_common'"
     local predictors_family "`predictors_common'"
 
+    /* Each fit still uses its own observed outcome/predictors and branch.
+       Missing detailed smoking is not a reason to remove a patient from other
+       models. No per-model recalibration or imputation is performed. */
     /* 1. Ethnicity. */
     scm_fit_mlogit, sex("`sex'") sequence(1) ///
         modelid("01_ethnicity") outcome(qf_ethrisk) ///
