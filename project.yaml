@@ -3,15 +3,15 @@ version: '5.0'
 actions:
   generate_dataset:
     run: >
-      ehrql:v1 generate-dataset 
-      analysis/dataset_definition_qfracture.py 
+      ehrql:v1 generate-dataset
+      analysis/s01_dataset_definition/dataset_definition_qfracture.py
       --output output/qfracture_variables.csv
     outputs:
       highly_sensitive:
         dataset: output/qfracture_variables.csv
 
   identify_dxa_eligible:
-    run: stata-mp:v1 analysis/identify_dxa_eligible.do
+    run: stata-mp:v1 analysis/s02_qfracture_and_dxa_eligibility/identify_dxa_eligible.do
     needs: [generate_dataset]
     outputs:
       highly_sensitive:
@@ -19,14 +19,14 @@ actions:
         dxa_eligible_population: output/dxa_eligible_population.dta
 
   create_table1_dxa:
-    run: stata-mp:v1 analysis/table1_dxa.do
+    run: stata-mp:v1 analysis/s03_unweighted_table1/table1_dxa.do
     needs: [identify_dxa_eligible]
     outputs:
       moderately_sensitive:
-        table1_qfracture: output/table1_dxa.csv  
+        table1_qfracture: output/table1_dxa.csv
 
   calibrate_women:
-    run: stata-mp:v1 analysis/women_calibration_weighting.do
+    run: stata-mp:v1 analysis/s04_calibration_weighting/women_calibration_weighting.do
     needs: [identify_dxa_eligible]
     outputs:
       highly_sensitive:
@@ -39,7 +39,7 @@ actions:
         feasibility: output/women_calibration_feasibility.csv
 
   calibrate_men:
-    run: stata-mp:v1 analysis/men_calibration_weighting.do
+    run: stata-mp:v1 analysis/s04_calibration_weighting/men_calibration_weighting.do
     needs: [identify_dxa_eligible]
     outputs:
       highly_sensitive:
@@ -52,7 +52,7 @@ actions:
         feasibility: output/men_calibration_feasibility.csv
 
   sequential_conditional_models:
-    run: stata-mp:v1 analysis/sequential_conditional_models.do
+    run: stata-mp:v1 analysis/s05_sequential_conditional_models/sequential_conditional_models.do
     needs:
       - calibrate_women
       - calibrate_men
@@ -64,4 +64,16 @@ actions:
         model_diagnostics_internal: output/internal/sequential_model_diagnostics_internal.csv
         category_diagnostics_internal: output/internal/sequential_model_category_diagnostics_internal.csv
         cohort_diagnostics_internal: output/internal/sequential_model_cohort_diagnostics_internal.csv
+
+  create_table1_weighted:
+    run: stata-mp:v1 analysis/s06_weighted_table1/table1_weighted_by_sex.do
+    needs:
+      - calibrate_women
+      - calibrate_men
+    outputs:
+      moderately_sensitive:
+        table1_women: output/release/table1_weighted_women.csv
+        table1_men: output/release/table1_weighted_men.csv
+        sdc_audit: output/internal/table1_weighted_by_sex_sdc_audit.csv
+
   
