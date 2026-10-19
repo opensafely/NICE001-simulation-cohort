@@ -14,7 +14,7 @@ local minimum_ess 8
 local round_base 5
 local write_internal_audit 1
 local weight_variable calibration_weight
-local cohort_scope "model_complete"  
+local cohort_scope "weighted_input"  
 
 capture mkdir "output"
 capture mkdir "`outdir'"
