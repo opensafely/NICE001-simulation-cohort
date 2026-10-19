@@ -168,7 +168,7 @@ gen b_ra_sle = b_ra
 replace b_ra_sle = 1 if b_sle == 1
 
 *Calculate QFracture 2016 10-year MOF risk 
-do "analysis/calculate_qfracture_mof.do"
+do "analysis/s02_qfracture_and_dxa_eligibility/calculate_qfracture_mof.do"
 
 *Construct Route 2 and final DXA eligibility
 generate byte route2 = (rx_osteoporosis_b4 == 0 & qfracture_calculable == 1 & !missing(qfracture_mof_10y_pct) & qfracture_mof_10y_pct >= 10)
